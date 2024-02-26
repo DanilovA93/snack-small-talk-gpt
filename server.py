@@ -20,8 +20,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         content_len = int(self.headers.get('Content-Length'))
         message = json.loads(self.rfile.read(content_len))
         text = message['text']
-        answer = model.generate(prompt=text, temp=1)
-        print(answer)
+        answer = model.generate(prompt=text, temp=1, max_tokens=3)
         self._set_headers()
         self.wfile.write(answer.encode())
 
