@@ -5,7 +5,7 @@ from http import HTTPStatus
 from gpt4all import GPT4All
 
 
-model = GPT4All(model_name='mpt-7b-chat-newbpe-q4_0.gguf', device='gpu')
+model = GPT4All(model_name='mistral-7b-openorca.gguf2.Q4_0.gguf', device='gpu')
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def _set_headers(self):
