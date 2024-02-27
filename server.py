@@ -6,8 +6,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 
 
-tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium", padding_side='left')
-model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
+tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large", padding_side='left')
+model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-large")
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def _set_headers(self):
