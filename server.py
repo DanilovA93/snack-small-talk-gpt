@@ -2,10 +2,12 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
-from gpt4all import GPT4All
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
 
 
-model = GPT4All(model_name='mistral-7b-openorca.gguf2.Q4_0.gguf', device='gpu')
+tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-medium", padding_side='left')
+model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def _set_headers(self):
@@ -20,7 +22,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         content_len = int(self.headers.get('Content-Length'))
         message = json.loads(self.rfile.read(content_len))
         text = message['text']
-        answer = model.generate(prompt=text, temp=1, max_tokens=50)
+        new_user_input_ids = tokenizer.encode(text + tokenizer.eos_token, return_tensors='pt')
+        chat_history_ids = model.generate(new_user_input_ids, max_length=1000, pad_token_id=tokenizer.eos_token_id)
+        answer = tokenizer.decode(chat_history_ids[:, new_user_input_ids.shape[-1]:][0], skip_special_tokens=True)
         self._set_headers()
         self.wfile.write(answer.encode())
 
