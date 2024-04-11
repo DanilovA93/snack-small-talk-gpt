@@ -12,7 +12,12 @@ model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")
 
 
 def generate(test_prompt) -> bytes:
-    inputs = tokenizer.apply_chat_template(test_prompt, return_tensors="pt").to("cuda")
+    messages = [
+        {"role": "user", "content": test_prompt},
+   ]
+
+    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
+
     outputs = model.generate(inputs, max_new_tokens=20)
     print(tokenizer.decode(outputs[0], skip_special_tokens=True))
     return "hi"
