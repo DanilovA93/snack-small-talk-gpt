@@ -3,11 +3,20 @@ import socketserver
 import json
 from http import HTTPStatus
 from transformers import AutoModelForCausalLM, AutoTokenizer
-import torch
 
 
-tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large", padding_side='left')
-model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-large")
+model_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+
+model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")
+
+tokenizer = transformers.AutoTokenizer.from_pretrained(model_id)
+
+def generate(test_prompt) -> bytes:
+    inputs = tokenizer.apply_chat_template(test_prompt, return_tensors="pt").to("cuda")
+    outputs = model.generate(inputs, max_new_tokens=20)
+    print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+    return "hi"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def _set_headers(self):
@@ -22,11 +31,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         content_len = int(self.headers.get('Content-Length'))
         message = json.loads(self.rfile.read(content_len))
         text = message['prompt']
-        new_user_input_ids = tokenizer.encode(text + tokenizer.eos_token, return_tensors='pt')
-        chat_history_ids = model.generate(new_user_input_ids, max_length=1000, pad_token_id=tokenizer.eos_token_id)
-        answer = tokenizer.decode(chat_history_ids[:, new_user_input_ids.shape[-1]:][0], skip_special_tokens=True)
         self._set_headers()
-        self.wfile.write(answer.encode())
+        self.wfile.write(generate(text))
 
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
