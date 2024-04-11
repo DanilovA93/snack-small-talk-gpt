@@ -2,14 +2,24 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+import torch
 
 
 model_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 
-model = AutoModelForCausalLM.from_pretrained(model_id, load_in_8bit_fp32_cpu_offload=True, device_map="auto")
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16,
+)
 
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    quantization_config=bnb_config,
+    torch_dtype=torch.float16,
+)
 
 def generate(test_prompt) -> bytes:
     messages = [
