@@ -10,7 +10,6 @@ tokenizer = AutoTokenizer.from_pretrained(model_id)
 
 model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")
 
-tokenizer = transformers.AutoTokenizer.from_pretrained(model_id)
 
 def generate(test_prompt) -> bytes:
     inputs = tokenizer.apply_chat_template(test_prompt, return_tensors="pt").to("cuda")
