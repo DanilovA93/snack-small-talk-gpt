@@ -21,7 +21,7 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.float16,
 )
 
-def generate(test_prompt) -> bytes:
+def generate(test_prompt) -> str:
     messages = [
         {"role": "user", "content": test_prompt},
    ]
@@ -29,8 +29,7 @@ def generate(test_prompt) -> bytes:
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
 
     outputs = model.generate(inputs, max_new_tokens=20)
-    print(tokenizer.decode(outputs[0], skip_special_tokens=True))
-    return "hi"
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def _set_headers(self):
@@ -46,7 +45,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         message = json.loads(self.rfile.read(content_len))
         text = message['prompt']
         self._set_headers()
-        self.wfile.write(generate(text))
+        self.wfile.write(generate(text).encode())
 
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
