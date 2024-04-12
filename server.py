@@ -15,13 +15,11 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_compute_dtype=torch.float16,
 )
 
-# model = AutoModelForCausalLM.from_pretrained(
-#     model_id,
-#     quantization_config=bnb_config,
-#     torch_dtype=torch.float16,
-# )
-model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")
-
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    quantization_config=bnb_config,
+    torch_dtype=torch.float16,
+)
 
 def generate(test_prompt) -> str:
     messages = [
