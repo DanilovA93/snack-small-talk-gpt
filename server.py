@@ -6,7 +6,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
 
-model_id = "mistralai/Mixtral-8x7B-Instruct-v0.1"
+model_id = "mistralai/Mistral-7B-Instruct-v0.1"
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 
 bnb_config = BitsAndBytesConfig(
