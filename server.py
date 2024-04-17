@@ -6,7 +6,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
 
-model_id = "mistralai/Mistral-7B-Instruct-v0.1"
+model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 
 bnb_config = BitsAndBytesConfig(
@@ -22,6 +22,7 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.float16,
 )
 
+
 def generate(test_prompt) -> str:
     messages = [
         {"role": "user", "content": test_prompt},
@@ -31,6 +32,7 @@ def generate(test_prompt) -> str:
 
     outputs = model.generate(inputs, max_new_tokens=20)
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
+
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def _set_headers(self):
