@@ -25,12 +25,27 @@ model = AutoModelForCausalLM.from_pretrained(
 
 def generate(test_prompt) -> str:
     messages = [
-        {"role": "user", "content": test_prompt},
-   ]
+        # {
+        #     "role": "system",
+        #     "content": "Hello, how are you?"
+        # },
+        # {
+        #     "role": "assistant",
+        #     "content": "I'm doing great. How can I help you today?"
+        # },
+        {
+            "role": "system",
+            "content": "You are a friendly chatbot who always responds in the style of a pirate"
+        },
+        {
+            "role": "user",
+            "content": test_prompt
+        }
+    ]
 
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
 
-    outputs = model.generate(inputs, max_new_tokens=20)
+    outputs = model.generate("", inputs, max_new_tokens=20)
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 
