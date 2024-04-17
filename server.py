@@ -25,18 +25,6 @@ model = AutoModelForCausalLM.from_pretrained(
 
 def generate(test_prompt) -> str:
     messages = [
-        # {
-        #     "role": "system",
-        #     "content": "Hello, how are you?"
-        # },
-        # {
-        #     "role": "assistant",
-        #     "content": "I'm doing great. How can I help you today?"
-        # },
-        {
-            "role": "assistant",
-            "content": "You are a friendly chatbot who always responds in the style of a pirate"
-        },
         {
             "role": "user",
             "content": test_prompt
