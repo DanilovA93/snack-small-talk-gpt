@@ -34,7 +34,7 @@ def generate(test_prompt) -> str:
         #     "content": "I'm doing great. How can I help you today?"
         # },
         {
-            "role": "system",
+            "role": "assistant",
             "content": "You are a friendly chatbot who always responds in the style of a pirate"
         },
         {
