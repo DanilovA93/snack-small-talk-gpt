@@ -2,32 +2,39 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
-from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
+model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 
-print(1)
-model_mistral = AutoModelForCausalLM.from_pretrained(
-"./mistral-7b-instruct-v0.2.Q4_K_M.gguf",
-    model_file="mistral-7b-instruct-v0.2.Q4_K_M.gguf", # replace Q4_K_M.gguf with Q5_K_M.gguf as needed
-    model_type="mistral",
-    gpu_layers=50, # Use `gpu_layers` to specify how many layers will be offloaded to the GPU.
-    hf=True
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16,
+    disable_exllama=True
 )
-print(2)
-tokenizer_mistral = AutoTokenizer.from_pretrained(
-    "TheBloke/Mistral-7B-Instruct-v0.2-GGUF", use_fast=True
-)
-print(3)
-pipe_mistral = pipeline(model=model_mistral, tokenizer=tokenizer_mistral, task='text-generation')
 
-# tokenizer.save_pretrained('./Mistral-7B-Instruct-v0.2-GGUF')
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    quantization_config=bnb_config,
+    torch_dtype=torch.float16,
+)
 
 
 def generate(test_prompt) -> str:
-    output_mistral = pipe_mistral(test_prompt, max_new_tokens=512)
+    messages = [
+        {
+            "role": "user",
+            "content": test_prompt
+        }
+    ]
 
-    return output_mistral[0]["generated_text"]
+    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
+
+    outputs = model.generate(inputs, max_new_tokens=20)
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
