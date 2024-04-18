@@ -22,8 +22,8 @@ llm = Llama(
 def generate(test_prompt) -> str:
 
     gpt = llm.create_chat_completion(
-        max_tokens=20,
-        temperature=0.5,
+        max_tokens=50,
+        temperature=0.0,
         messages=[
             {
                 "role": "system",
