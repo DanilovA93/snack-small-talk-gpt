@@ -12,6 +12,7 @@ print(2)
 # model = AutoModelForCausalLM.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 print(3)
+# tokenizer.save_pretrained('./Mistral-7B-Instruct-v0.2-GGUF')
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
