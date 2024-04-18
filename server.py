@@ -8,11 +8,11 @@ import torch
 access_token = "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"
 
 model = AutoModelForCausalLM.from_pretrained(
-    "mistralai/Mistral-7B-Instruct-v0.2",
+    "TheBloke/Mistral-7B-Instruct-v0.2-GPTQ",
     token = access_token
 )
 tokenizer = AutoTokenizer.from_pretrained(
-    "mistralai/Mistral-7B-Instruct-v0.2",
+    "TheBloke/Mistral-7B-Instruct-v0.2-GPTQ",
     token = access_token
 )
 
