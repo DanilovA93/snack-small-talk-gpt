@@ -38,7 +38,6 @@ def generate(prompt) -> str:
     print(1)
     model_inputs = encodeds.to(device)
     print(2)
-    model.to(device)
     print(3)
 
     generated_ids = model.generate(model_inputs, max_new_tokens=100, do_sample=True)
