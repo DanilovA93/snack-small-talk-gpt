@@ -7,6 +7,7 @@ import torch
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
+device = "cuda"
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -32,9 +33,15 @@ def generate(prompt) -> str:
             "content": prompt
         }
     ]
-    input_ids = tokenizer.apply_chat_template(messages, tokenize=True)
-    print(input_ids)
-    return model.generate(input_ids, max_new_tokens=128, do_sample=False)
+    encodeds = tokenizer.apply_chat_template(messages, return_tensors="pt")
+
+    model_inputs = encodeds.to(device)
+    model.to(device)
+
+    generated_ids = model.generate(model_inputs, max_new_tokens=100, do_sample=True)
+    decoded = tokenizer.batch_decode(generated_ids)
+
+    return decoded[0]
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
