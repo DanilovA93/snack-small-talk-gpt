@@ -2,54 +2,21 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
-import torch
+from transformers import AutoModelForQuestionAnswering, AutoTokenizer, pipeline
 
 
-model_id = "mistralai/Mistral-7B-Instruct-v0.2"
-access_token = "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"
+model_name = "deepset/roberta-base-squad2"
+nlp = pipeline('question-answering', model=model_name, tokenizer=model_name)
 
-tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
-device = "cuda"
-
-# bnb_config = BitsAndBytesConfig(
-#     load_in_4bit=True,
-#     bnb_4bit_use_double_quanlst=True,
-#     bnb_4bit_quant_type="nf4",
-#     bnb_4bit_compute_dtype=torch.float16
-# )
-
-quantization_config = BitsAndBytesConfig(
-    load_in_8bit=True,
-    llm_int8_threshold=200.0
-)
-
-
-model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    token=access_token,
-    torch_dtype=torch.float16,
-    quantization_config=quantization_config
-)
 
 
 def generate(test_prompt) -> str:
-    messages = [
-        {
-            "role": "user",
-            "content": test_prompt
-        }
-    ]
-
-    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
-    generated_ids = model.generate(
-        inputs,
-        max_new_tokens=50,
-        temperature=0.1,
-        do_sample=True
-    )
-    decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
-    return decoded[0]
+    QA_input = {
+        'question': 'Why is model conversion important?',
+        'context': 'The option to convert models between FARM and transformers gives freedom to the user and let people easily switch between frameworks.'
+    }
+    res = nlp(QA_input)
+    return res
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
