@@ -7,7 +7,9 @@ import torch
 
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
-tokenizer = AutoTokenizer.from_pretrained(model_id)
+access_token = "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"
+
+tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 device = "cuda"
 
 # bnb_config = BitsAndBytesConfig(
@@ -17,9 +19,7 @@ device = "cuda"
 #     bnb_4bit_compute_dtype=torch.float16
 # )
 
-model = AutoModelForCausalLM.from_pretrained(
-    model_id
-).to(device)
+model = AutoModelForCausalLM.from_pretrained(model_id, token=access_token).to(device)
 
 
 def generate(test_prompt) -> str:
