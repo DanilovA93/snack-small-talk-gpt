@@ -32,16 +32,15 @@ def generate(test_prompt) -> str:
     ]
 
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
-
-    outputs = model.generate(
-        prompt=inputs,
-        prompt_template="{prompt}",
-        top_k=50,
-        top_p=0.9,
-        max_new_tokens=50,
-        temperature=0.6
-    )
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+    generated_ids = model.generate(inputs, max_new_tokens=1000, do_sample=True)
+    decoded = tokenizer.batch_decode(generated_ids)
+    # outputs = model.generate(
+    #     inputs,
+    #     max_new_tokens=50,
+    #     do_sample=True,
+    #     temperature=0.1
+    # )
+    return decoded[0]
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
