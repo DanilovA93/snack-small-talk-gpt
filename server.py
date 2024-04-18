@@ -8,6 +8,7 @@ import torch
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 tokenizer = AutoTokenizer.from_pretrained(model_id)
+device = "cuda"
 
 # bnb_config = BitsAndBytesConfig(
 #     load_in_4bit=True,
@@ -18,7 +19,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_id)
 
 model = AutoModelForCausalLM.from_pretrained(
     model_id
-)
+).to(device)
 
 
 def generate(test_prompt) -> str:
@@ -29,7 +30,7 @@ def generate(test_prompt) -> str:
         }
     ]
 
-    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
+    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
     generated_ids = model.generate(
         inputs,
         max_new_tokens=50,
