@@ -1,3 +1,4 @@
+import os
 import http.server
 import socketserver
 import json
@@ -5,6 +6,7 @@ from http import HTTPStatus
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
+os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
@@ -14,7 +16,7 @@ device = "cuda"
 
 # bnb_config = BitsAndBytesConfig(
 #     load_in_4bit=True,
-#     bnb_4bit_use_double_quant=True,
+#     bnb_4bit_use_double_quanlst=True,
 #     bnb_4bit_quant_type="nf4",
 #     bnb_4bit_compute_dtype=torch.float16
 # )
