@@ -5,9 +5,16 @@ from http import HTTPStatus
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
+access_token = "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"
 
-model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
-tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
+model = AutoModelForCausalLM.from_pretrained(
+    "mistralai/Mistral-7B-Instruct-v0.2",
+    token = access_token
+)
+tokenizer = AutoTokenizer.from_pretrained(
+    "mistralai/Mistral-7B-Instruct-v0.2",
+    token = access_token
+)
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
