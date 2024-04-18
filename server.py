@@ -41,7 +41,7 @@ def generate(test_prompt) -> str:
         ]
     )
 
-    print(gpt["choices"][0])
+    print(gpt["choices"][0]["message"]["content"])
     return "Hi"
     #
     #
