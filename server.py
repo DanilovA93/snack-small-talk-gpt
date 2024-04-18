@@ -32,7 +32,7 @@ def generate(prompt) -> str:
             "content": prompt
         }
     ]
-    input_ids = tokenizer.apply_chat_template(messages, tokenize=False)
+    input_ids = tokenizer.apply_chat_template(messages, tokenize=True)
     print(input_ids)
     return model.generate(input_ids, max_new_tokens=128, do_sample=False)
 
