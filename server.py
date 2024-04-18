@@ -3,6 +3,7 @@ import socketserver
 import json
 from http import HTTPStatus
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from llama_cpp import Llama
 import torch
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
@@ -17,12 +18,23 @@ bnb_config = BitsAndBytesConfig(
 )
 
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=token)
-model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    token=token,
-    quantization_config=bnb_config,
-    torch_dtype=torch.float16,
+# model = AutoModelForCausalLM.from_pretrained(
+#     "./mistral-7b-instruct-v0.2.Q4_K_M.gguf",
+#     # token=token,
+#     quantization_config=bnb_config,
+#     torch_dtype=torch.float16,
+# )
+model = Llama(
+    model_path="./mistral-7b-instruct-v0.2.Q4_K_M.gguf",  # Download the model file first
+    chat_format="llama-2",
+    n_gpu_layers=35,        # The number of layers to offload to GPU, if you have GPU acceleration available
+    n_ctx=32768,            # The max sequence length to use - note that longer sequence lengths require much more resources
+    n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
 )
+
+
+
+
 
 
 def generate(test_prompt) -> str:
