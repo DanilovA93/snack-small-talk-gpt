@@ -35,7 +35,7 @@ def generate(test_prompt) -> str:
     generated_ids = model.generate(
         inputs,
         max_new_tokens=50,
-        temperature=0.9,
+        temperature=0.1,
         do_sample=True
     )
     decoded = tokenizer.batch_decode(generated_ids)
