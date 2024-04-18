@@ -34,7 +34,8 @@ def generate(test_prompt) -> str:
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
     generated_ids = model.generate(
         inputs,
-        max_new_tokens=500,
+        max_new_tokens=50,
+        temperature=0.9,
         do_sample=True
     )
     decoded = tokenizer.batch_decode(generated_ids)
