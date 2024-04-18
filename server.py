@@ -8,6 +8,7 @@ from llama_cpp import Llama
 # Set gpu_layers to the number of layers to offload to GPU. Set to 0 if no GPU acceleration is available on your system.
 llm = Llama(
     model_path="./mistral-7b-instruct-v0.2.Q4_K_M.gguf",  # Download the model file first
+    chat_format="llama-2",
     n_ctx=16384,  # The max sequence length to use - note that longer sequence lengths require much more resources
     n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
     n_gpu_layers=35         # The number of layers to offload to GPU, if you have GPU acceleration available
@@ -42,22 +43,6 @@ def generate(test_prompt) -> str:
     )
 
     return gpt["choices"][0]["message"]["content"]
-
-    #
-    #
-    #
-    #
-    # messages = [
-    #     {
-    #         "role": "user",
-    #         "content": test_prompt
-    #     }
-    # ]
-    #
-    # inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
-    #
-    # outputs = model.generate(inputs, max_new_tokens=20)
-    # return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
