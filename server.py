@@ -40,7 +40,7 @@ def generate(test_prompt) -> str:
             "content": "I'm here to practice English"
         },
         {
-            "role": "user",
+            "role": "assistant",
             "content": "I'll be happy to help you with your practice"
 
         },
