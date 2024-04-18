@@ -2,27 +2,31 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
-import transformers
-import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
 
-model_id = "meta-llama/Meta-Llama-3-8B"
+model_id = "CohereForAI/c4ai-command-r-plus"
 access_token = "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"
 
 
-pipeline = transformers.pipeline(
-    "text-generation", model=model_id, token=access_token, model_kwargs={"torch_dtype": torch.bfloat16}, device_map="auto"
-)
-
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(model_id)
 
 def generate(test_prompt) -> str:
 
-    answer = pipeline(test_prompt)
+    messages = [{"role": "user", "content": test_prompt}]
+    input_ids = tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True, return_tensors="pt")
 
-    print(answer)
+    gen_tokens = model.generate(
+        input_ids,
+        max_new_tokens=100,
+        do_sample=True,
+        temperature=0.3,
+    )
 
+    gen_text = tokenizer.decode(gen_tokens[0])
 
-    return "=)"
+    return gen_text
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
