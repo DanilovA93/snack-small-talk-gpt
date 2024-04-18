@@ -6,15 +6,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
 access_token = "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"
-
-model = AutoModelForCausalLM.from_pretrained(
-    "TheBloke/Mistral-7B-Instruct-v0.2-GPTQ",
-    token = access_token
-)
-tokenizer = AutoTokenizer.from_pretrained(
-    "TheBloke/Mistral-7B-Instruct-v0.2-GPTQ",
-    token = access_token
-)
+model_id = "TheBloke/Mistral-7B-Instruct-v0.2-GPTQ"
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -24,8 +16,10 @@ bnb_config = BitsAndBytesConfig(
     disable_exllama=True
 )
 
+tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
+    token=access_token,
     quantization_config=bnb_config,
     torch_dtype=torch.float16,
 )
