@@ -36,7 +36,7 @@ def generate(test_prompt) -> str:
 
     gpt = llm(
         "<s>[INST] {prompt} [/INST]", # Prompt
-        max_tokens=512,  # Generate up to 512 tokens
+        max_tokens=20,  # Generate up to 512 tokens
         stop=["</s>"],   # Example stop token - not necessarily correct for this specific model! Please check before using.
         echo=True        # Whether to echo the prompt
     )
