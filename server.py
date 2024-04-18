@@ -32,7 +32,11 @@ def generate(test_prompt) -> str:
     ]
 
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
-    generated_ids = model.generate(inputs, max_new_tokens=1000, do_sample=True)
+    generated_ids = model.generate(
+        inputs,
+        max_new_tokens=500,
+        do_sample=True
+    )
     decoded = tokenizer.batch_decode(generated_ids)
     # outputs = model.generate(
     #     inputs,
