@@ -6,9 +6,11 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
 
-
-model_id = "./mistral-7b-instruct-v0.2.Q4_K_M.gguf"
+print(1)
+model_id = "/home/ubuntu/snack-small-talk-gpt/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
+print(2)
 tokenizer = AutoTokenizer.from_pretrained(model_id)
+print(3)
 
 # model = AutoModelForCausalLM.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_id)
