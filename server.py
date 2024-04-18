@@ -5,7 +5,7 @@ from http import HTTPStatus
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
-model_id = "mistralai/Mistral-7B-Instruct-v0.2"
+model_id = "HuggingFaceH4/zephyr-7b-beta" #"mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 
 bnb_config = BitsAndBytesConfig(
@@ -28,23 +28,14 @@ model = AutoModelForCausalLM.from_pretrained(
 def generate(prompt) -> str:
     messages = [
         {
-            "role": "user",
-            "content": "hi, my name is Anton"
+            "role": "system",
+            "content": "You are a friendly chatbot who always responds in the style of a pirate",
         },
-        {
-            "role": "assistant",
-            "content": "Nice to meet you, my name is GPT"
-        },
-        {
-            "role": "user",
-            "content": prompt
-        }
+        {"role": "user", "content": prompt},
     ]
-    input_ids = tokenizer.apply_chat_template(messages, tokenize=False)
-    print(input_ids)
-    # outputs = model.generate(input_ids, max_new_tokens=128, do_sample=False)
+    tokenized_chat = tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True, return_tensors="pt")
 
-    return input_ids
+    return tokenizer.decode(tokenized_chat[0])
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
