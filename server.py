@@ -12,12 +12,12 @@ nlp = pipeline('question-answering', model=model_name, tokenizer=model_name)
 
 def generate(test_prompt) -> str:
     QA_input = {
-        'question': 'Why is model conversion important?',
+        'question': test_prompt,
         'context': 'The option to convert models between FARM and transformers gives freedom to the user and let people easily switch between frameworks.'
     }
     res = nlp(QA_input)
     print(res)
-    return res
+    return res["answer"]
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
