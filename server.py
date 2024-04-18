@@ -5,6 +5,8 @@ from http import HTTPStatus
 from llama_cpp import Llama
 
 
+system_prompt = "You are a pirate, and must answer like a pirate."
+
 # Set gpu_layers to the number of layers to offload to GPU. Set to 0 if no GPU acceleration is available on your system.
 llm = Llama(
     model_path="./mistral-7b-instruct-v0.2.Q4_K_M.gguf",    # Download the model file first
@@ -12,10 +14,7 @@ llm = Llama(
     n_gpu_layers=35,        # The number of layers to offload to GPU, if you have GPU acceleration available
     n_ctx=3584,             # The max sequence length to use - note that longer sequence lengths require much more resources
     n_batch=521,
-    # n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
-    verbose=True,
-    logits_all=True,
-    echo=True
+    n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
 )
 
 
@@ -23,10 +22,10 @@ def generate(test_prompt) -> str:
 
     gpt = llm.create_chat_completion(
         messages=[
-            {
-                "role": "system",
-                "content": "You are a pirate, and must answer like a pirate."
-            },
+            # {
+            #     "role": "system",
+            #     "content": system_prompt
+            # },
             {
                 "role": "user",
                 "content": test_prompt
