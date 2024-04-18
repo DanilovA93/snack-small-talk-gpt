@@ -5,10 +5,13 @@ from http import HTTPStatus
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
-model_path = "./mistral-7b-instruct-v0.2.Q4_K_M.gguf"
 
-model = AutoModelForCausalLM.from_pretrained(model_path)
-tokenizer = AutoTokenizer.from_pretrained(model_path)
+
+model_id = "./mistral-7b-instruct-v0.2.Q4_K_M.gguf"
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+
+# model = AutoModelForCausalLM.from_pretrained(model_path)
+tokenizer = AutoTokenizer.from_pretrained(model_id)
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
