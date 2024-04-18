@@ -5,8 +5,8 @@ from http import HTTPStatus
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
+model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
-model_id = "TheBloke/Mistral-7B-Instruct-v0.2-GPTQ"
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
