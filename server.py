@@ -9,17 +9,15 @@ import torch
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_use_double_quant=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.float16
-)
+# bnb_config = BitsAndBytesConfig(
+#     load_in_4bit=True,
+#     bnb_4bit_use_double_quant=True,
+#     bnb_4bit_quant_type="nf4",
+#     bnb_4bit_compute_dtype=torch.float16
+# )
 
 model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    quantization_config=bnb_config,
-    torch_dtype=torch.float16,
+    model_id
 )
 
 
@@ -39,12 +37,6 @@ def generate(test_prompt) -> str:
         do_sample=True
     )
     decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
-    # outputs = model.generate(
-    #     inputs,
-    #     max_new_tokens=50,
-    #     do_sample=True,
-    #     temperature=0.1
-    # )
     return decoded[0]
 
 
