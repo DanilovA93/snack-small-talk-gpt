@@ -47,7 +47,10 @@ def generate(test_prompt) -> str:
 
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
 
-    outputs = model.generate(inputs)
+    # outputs = model.generate(inputs)
+    outputs = model.create_chat_completion(inputs)
+
+
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 
