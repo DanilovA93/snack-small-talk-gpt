@@ -5,7 +5,7 @@ from http import HTTPStatus
 from llama_cpp import Llama
 
 
-system_prompt = "You are a pirate, and must answer like a pirate."
+system_prompt = "You are a teacher."
 model_path = "./mistral-7b-instruct-v0.2.Q4_K_M.gguf"
 
 # Set gpu_layers to the number of layers to offload to GPU. Set to 0 if no GPU acceleration is available on your system.
@@ -22,7 +22,7 @@ def generate(test_prompt) -> str:
 
     gpt = llm.create_chat_completion(
         max_tokens=50,
-        temperature=1.0,
+        temperature=0.0,
         messages=[
             {
                 "role": "system",
