@@ -34,8 +34,11 @@ def generate(test_prompt) -> str:
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to("cuda")
 
     outputs = model.generate(
-        inputs,
-        max_new_tokens=40,
+        prompt=inputs,
+        prompt_template="{prompt}",
+        top_k=50,
+        top_p=0.9,
+        max_new_tokens=50,
         do_sample=True,
         temperature=0.1
     )
@@ -54,9 +57,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
         message = json.loads(self.rfile.read(content_len))
-        text = message['prompt']
+        prompt = message['prompt']
         self._set_headers()
-        self.wfile.write(generate(text).encode())
+        self.wfile.write(generate(prompt).encode())
 
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
