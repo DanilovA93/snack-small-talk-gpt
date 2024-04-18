@@ -40,7 +40,7 @@ def generate(prompt) -> str:
             "content": prompt
         }
     ]
-    input_ids = tokenizer.apply_chat_template(messages, tokenize=False).to("cuda")
+    input_ids = tokenizer.apply_chat_template(messages, tokenize=False)
     outputs = model.generate(input_ids, max_new_tokens=128, do_sample=False)
 
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
