@@ -41,9 +41,10 @@ def generate(prompt) -> str:
         }
     ]
     input_ids = tokenizer.apply_chat_template(messages, tokenize=False)
-    outputs = model.generate(input_ids, max_new_tokens=128, do_sample=False)
+    print(input_ids)
+    # outputs = model.generate(input_ids, max_new_tokens=128, do_sample=False)
 
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return input_ids
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
