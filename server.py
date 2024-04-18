@@ -36,6 +36,7 @@ def generate(test_prompt) -> str:
     outputs = model.generate(
         inputs,
         max_new_tokens=40,
+        do_sample=True,
         temperature=0.0
     )
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
