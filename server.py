@@ -9,11 +9,9 @@ import torch
 print(1)
 model_id = "/home/ubuntu/snack-small-talk-gpt/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
 print(2)
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-print(3)
-
 # model = AutoModelForCausalLM.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_id)
+print(3)
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -22,13 +20,13 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_compute_dtype=torch.float16,
     disable_exllama=True
 )
-
+print(4)
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     quantization_config=bnb_config,
     torch_dtype=torch.float16,
 )
-
+print(5)
 
 def generate(test_prompt) -> str:
     messages = [
