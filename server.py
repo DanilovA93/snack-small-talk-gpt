@@ -8,7 +8,7 @@ import torch
 
 print(1)
 model_mistral = AutoModelForCausalLM.from_pretrained(
-"TheBloke/Mistral-7B-Instruct-v0.2-GGUF",
+"./mistral-7b-instruct-v0.2.Q4_K_M.gguf",
     model_file="mistral-7b-instruct-v0.2.Q4_K_M.gguf", # replace Q4_K_M.gguf with Q5_K_M.gguf as needed
     model_type="mistral",
     gpu_layers=50, # Use `gpu_layers` to specify how many layers will be offloaded to the GPU.
