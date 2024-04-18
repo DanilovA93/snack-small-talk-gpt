@@ -30,7 +30,10 @@ def generate(test_prompt) -> str:
 
     gpt = llm.create_chat_completion(
         messages=[
-            {"role": "system", "content": "You are a story writing assistant."},
+            {
+                "role": "system",
+                "content": "You are a story writing assistant."
+            },
             {
                 "role": "user",
                 "content": test_prompt
@@ -38,7 +41,7 @@ def generate(test_prompt) -> str:
         ]
     )
 
-    print(gpt)
+    print(gpt.choices)
     return "Hi"
     #
     #
