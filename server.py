@@ -2,54 +2,26 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+import transformers
 import torch
 
 
-model_id = "mistralai/Mistral-7B-Instruct-v0.2"
-access_token = "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"
-
-tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
-device = "cuda"
-
-# bnb_config = BitsAndBytesConfig(
-#     load_in_4bit=True,
-#     bnb_4bit_use_double_quanlst=True,
-#     bnb_4bit_quant_type="nf4",
-#     bnb_4bit_compute_dtype=torch.float16
-# )
-
-quantization_config = BitsAndBytesConfig(
-    load_in_8bit=True,
-    llm_int8_threshold=200.0
-)
+model_id = "meta-llama/Meta-Llama-3-8B"
 
 
-model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    token=access_token,
-    torch_dtype=torch.float16,
-    quantization_config=quantization_config
+pipeline = transformers.pipeline(
+    "text-generation", model=model_id, model_kwargs={"torch_dtype": torch.bfloat16}, device_map="auto"
 )
 
 
 def generate(test_prompt) -> str:
-    messages = [
-        {
-            "role": "user",
-            "content": test_prompt
-        }
-    ]
 
-    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
-    generated_ids = model.generate(
-        inputs,
-        max_new_tokens=50,
-        temperature=0.1,
-        do_sample=True
-    )
-    decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
-    return decoded[0]
+    answer = pipeline(test_prompt)
+
+    print(answer)
+
+
+    return "=)"
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
