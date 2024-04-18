@@ -2,11 +2,17 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import pipeline, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
 model_id = "HuggingFaceH4/zephyr-7b-beta" #"mistralai/Mistral-7B-Instruct-v0.2"
-access_token = "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"
+# access_token = "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"
+pipe = pipeline(
+    "text-generation",
+    model=model_id,
+    torch_dtype=torch.bfloat16,
+    device_map="auto"
+)
 
 bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -16,13 +22,13 @@ bnb_config = BitsAndBytesConfig(
     disable_exllama=True
 )
 
-tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
-model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    token=access_token,
-    quantization_config=bnb_config,
-    torch_dtype=torch.float16,
-)
+# tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
+# model = AutoModelForCausalLM.from_pretrained(
+#     model_id,
+#     token=access_token,
+#     quantization_config=bnb_config,
+#     torch_dtype=torch.float16,
+# )
 
 
 def generate(prompt) -> str:
@@ -31,11 +37,23 @@ def generate(prompt) -> str:
             "role": "system",
             "content": "You are a friendly chatbot who always responds in the style of a pirate",
         },
-        {"role": "user", "content": prompt},
+        {
+            "role": "user",
+            "content": prompt
+        },
     ]
-    tokenized_chat = tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True, return_tensors="pt")
+    # tokenized_chat = tokenizer.apply_chat_template(
+    #     messages,
+    #     tokenize=True,
+    #     add_generation_prompt=True,
+    #     return_tensors="pt"
+    # )
+    #
+    # return tokenizer.decode(tokenized_chat[0])
 
-    return tokenizer.decode(tokenized_chat[0])
+    prompt = pipe.tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    return pipe(prompt, max_new_tokens=256, do_sample=True, temperature=0.7, top_k=50, top_p=0.95)
+
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
