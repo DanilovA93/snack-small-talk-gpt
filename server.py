@@ -32,7 +32,7 @@ def generate(test_prompt) -> str:
         messages=[
             {
                 "role": "system",
-                "content": "You are a story writing assistant."
+                "content": "You are a pirate, and must answer like a pirate."
             },
             {
                 "role": "user",
@@ -41,8 +41,8 @@ def generate(test_prompt) -> str:
         ]
     )
 
-    print(gpt["choices"][0]["message"]["content"])
-    return "Hi"
+    return gpt["choices"][0]["message"]["content"]
+
     #
     #
     #
