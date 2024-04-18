@@ -30,7 +30,7 @@ model = AutoModelForCausalLM.from_pretrained(
     token=access_token,
     torch_dtype=torch.float16,
     quantization_config=quantization_config
-).to(device)
+)
 
 
 def generate(test_prompt) -> str:
