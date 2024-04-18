@@ -7,7 +7,7 @@ import torch
 
 
 print(1)
-model_id = "/home/ubuntu/snack-small-talk-gpt/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
+model_id = "TheBloke/Mistral-7B-Instruct-v0.2-GGUF"
 print(2)
 # model = AutoModelForCausalLM.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_id)
