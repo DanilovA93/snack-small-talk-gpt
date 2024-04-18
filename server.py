@@ -21,25 +21,27 @@ llm = Llama(
 
 def generate(test_prompt) -> str:
 
-    # gpt = llm.create_chat_completion(
-    #     messages=[
-    #         {
-    #             "role": "system",
-    #             "content": system_prompt
-    #         },
-    #         {
-    #             "role": "user",
-    #             "content": test_prompt
-    #         }
-    #     ]
-    # )
-
-    gpt = llm(
-        "<s>[INST] {prompt} [/INST]", # Prompt
-        max_tokens=20,  # Generate up to 512 tokens
-        stop=["</s>"],   # Example stop token - not necessarily correct for this specific model! Please check before using.
-        echo=True        # Whether to echo the prompt
+    gpt = llm.create_chat_completion(
+        max_tokens=20,
+        temperature=0.5,
+        messages=[
+            {
+                "role": "system",
+                "content": system_prompt
+            },
+            {
+                "role": "user",
+                "content": test_prompt
+            }
+        ]
     )
+
+    # gpt = llm(
+    #     "<s>[INST] {prompt} [/INST]", # Prompt
+    #     max_tokens=20,  # Generate up to 512 tokens
+    #     stop=["</s>"],   # Example stop token - not necessarily correct for this specific model! Please check before using.
+    #     echo=True        # Whether to echo the prompt
+    # )
 
     print(gpt)
 
