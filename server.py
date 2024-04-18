@@ -37,7 +37,7 @@ def generate(test_prompt) -> str:
         inputs,
         max_new_tokens=40,
         do_sample=True,
-        temperature=0.0
+        temperature=0.1
     )
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
