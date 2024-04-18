@@ -29,6 +29,23 @@ def generate(test_prompt) -> str:
     messages = [
         {
             "role": "user",
+            "content": "hi"
+        },
+        {
+            "role": "assistant",
+            "content": "Hi! How can i help you?"
+        },
+        {
+            "role": "user",
+            "content": "I'm here to practice English"
+        },
+        {
+            "role": "user",
+            "content": "I'll be happy to help you with your practice"
+
+        },
+        {
+            "role": "user",
             "content": test_prompt
         }
     ]
