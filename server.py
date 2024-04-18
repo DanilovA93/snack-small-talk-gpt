@@ -1,4 +1,3 @@
-import os
 import http.server
 import socketserver
 import json
@@ -6,7 +5,6 @@ from http import HTTPStatus
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
-os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
@@ -21,7 +19,18 @@ device = "cuda"
 #     bnb_4bit_compute_dtype=torch.float16
 # )
 
-model = AutoModelForCausalLM.from_pretrained(model_id, token=access_token).to(device)
+quantization_config = BitsAndBytesConfig(
+    load_in_8bit=True,
+    llm_int8_threshold=200.0
+)
+
+
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    token=access_token,
+    torch_dtype=torch.float16,
+    quantization_config=quantization_config
+).to(device)
 
 
 def generate(test_prompt) -> str:
