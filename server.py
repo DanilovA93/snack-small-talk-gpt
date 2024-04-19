@@ -12,16 +12,11 @@ access_token = "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"
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 device = "cuda"
 
-# bnb_config = BitsAndBytesConfig(
-#     load_in_4bit=True,
-#     bnb_4bit_use_double_quanlst=True,
-#     bnb_4bit_quant_type="nf4",
-#     bnb_4bit_compute_dtype=torch.float16
-# )
-
 quantization_config = BitsAndBytesConfig(
-    load_in_8bit=True,
-    llm_int8_threshold=200.0
+    load_in_4bit=True,
+    bnb_4bit_use_double_quanlst=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16
 )
 
 
