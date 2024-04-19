@@ -5,44 +5,45 @@ from http import HTTPStatus
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
+
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
-device = "cuda"
-
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_use_double_quant=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.float16,
-    disable_exllama=True
-)
 
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
+device = "cuda"
+
+quantization_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quanlst=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16
+)
+
+
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     token=access_token,
-    quantization_config=bnb_config,
     torch_dtype=torch.float16,
+    quantization_config=quantization_config
 )
 
 
-def generate(prompt) -> str:
+def generate(test_prompt) -> str:
     messages = [
         {
             "role": "user",
-            "content": prompt
+            "content": test_prompt
         }
     ]
-    encodeds = tokenizer.apply_chat_template(messages, return_tensors="pt")
 
-    print(1)
-    model_inputs = encodeds.to(device)
-    print(2)
-    print(3)
-
-    generated_ids = model.generate(model_inputs, max_new_tokens=100, do_sample=True)
-    decoded = tokenizer.batch_decode(generated_ids)
-
+    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
+    generated_ids = model.generate(
+        inputs,
+        max_new_tokens=50,
+        temperature=0.1,
+        do_sample=True
+    )
+    decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
     return decoded[0]
 
 
@@ -58,9 +59,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
         message = json.loads(self.rfile.read(content_len))
-        text = message['prompt']
+        prompt = message['prompt']
         self._set_headers()
-        self.wfile.write(generate(text).encode())
+        self.wfile.write(generate(prompt).encode())
 
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
