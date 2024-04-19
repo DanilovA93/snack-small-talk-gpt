@@ -2,32 +2,46 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
-from transformers import AutoTokenizer, GemmaForCausalLM
-import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
+device = "cuda"
 model_id = "NexaAIDev/Octopus-v2"
 access_token = "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"
 
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = GemmaForCausalLM.from_pretrained(
-    model_id, torch_dtype=torch.bfloat16, device_map="auto"
+model = AutoModelForCausalLM.from_pretrained(
+    "Qwen/CodeQwen1.5-7B-Chat",
+    torch_dtype="auto",
+    device_map="auto"
 )
+tokenizer = AutoTokenizer.from_pretrained("Qwen/CodeQwen1.5-7B-Chat")
 
 
-def generate(test_prompt) -> str:
+def generate(prompt) -> str:
 
-    input_ids = tokenizer(test_prompt, return_tensors="pt").to(model.device)
-    input_length = input_ids["input_ids"].shape[1]
-    outputs = model.generate(
-        input_ids=input_ids["input_ids"],
-        max_length=1024,
-        do_sample=False
+    messages = [
+        {"role": "system", "content": "You are a helpful teacher."},
+        {"role": "user", "content": prompt}
+    ]
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True
     )
-    generated_sequence = outputs[:, input_length:].tolist()
-    res = tokenizer.decode(generated_sequence[0])
+    model_inputs = tokenizer([text], return_tensors="pt").to(device)
 
-    return res
+    generated_ids = model.generate(
+        model_inputs.input_ids,
+        max_new_tokens=512
+    )
+    generated_ids = [
+        output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
+    ]
+
+    response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
+
+
+    return response
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
