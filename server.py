@@ -61,9 +61,8 @@ def generate(
         }
     )
 
-    rrr = tokenizer.apply_chat_template(messages, return_tensors="pt")
-    inputs = rrr.to(device)
-    prompt_length = rrr['input_ids'].shape[1]
+    tokenized_chat = tokenizer.apply_chat_template(messages, return_tensors="pt")
+    inputs = tokenized_chat.to(device)
 
     outputs = model.generate(
         inputs,
@@ -96,11 +95,15 @@ def generate(
         top_k=top_k
     )
 
-    answer = tokenizer.decode(
-        outputs[0][prompt_length:]
-        # skip_special_tokens=True
-    )
+    # answer = tokenizer.decode(
+    #     outputs[inputs.shape[0]:])[0],
+    #     skip_special_tokens=True
+    # )
 
+    answer = tokenizer.batch_decode(
+        outputs[inputs.shape[0]:],
+        skip_special_tokens=True
+    )[0]
 
     print(answer)
 
