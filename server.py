@@ -97,7 +97,7 @@ def generate(
         #       integer or null
         top_k=top_k
     )
-    answer = tokenizer.batch_decode(
+    answer = tokenizer.decode(
         outputs[0],
         skip_special_tokens=True
     )
