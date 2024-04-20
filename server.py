@@ -93,18 +93,18 @@ def generate(
 
     decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
 
-    print(decoded)
+    print(decoded[-1])
 
     answer = decoded[0]
 
-    # messages.append(
-    #     {
-    #         "role": "assistant",
-    #         "content": answer
-    #     }
-    # )
+    messages.append(
+        {
+            "role": "assistant",
+            "content": answer
+        }
+    )
 
-    return "answer"
+    return answer
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
