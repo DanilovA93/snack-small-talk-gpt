@@ -25,9 +25,26 @@ model = AutoModelForCausalLM.from_pretrained(
     quantization_config=quantization_config
 )
 
+messages = [
+    {
+        "role": "user",
+        "content": "Pretend you are a young pretty woman. "
+                   "You are openhearted and adventures. "
+                   "I want to practice English and to have fun) Use simple lexic. "
+                   "Try to make answers very short. Use humour if appropriate. "
+                   "If you ask question, ask only one question in response. "
+                   "Let's chat! Ask me what I want"
+    },
+    {
+        "role": "assistant",
+        "content": "Okey-dokey, I hope we both have fun"
+    }
+]
+
 
 def generate(
         prompt,
+        name,
         max_new_tokens=50,
         do_sample=True,
         temperature=0.7,
@@ -35,35 +52,13 @@ def generate(
         top_k=40,
 ) -> str:
 
-    print(
-        f"prompt={prompt}"
-        f"max_new_tokens={max_new_tokens}"
-        f"do_sample={do_sample}"
-        f"temperature={temperature}"
-        f"top_p={top_p}"
-        f"top_k={top_k}"
-    )
-
-    messages = [
-        {
-            "role": "user",
-            "content": "My name is Anton, "
-                       "Pretend you are a young pretty woman. "
-                       "You are openhearted and adventures. "
-                       "I want to practice English and to have fun) Use simple lexic. "
-                       "Try to make answers very short. Use humour if appropriate. "
-                       "If you ask question, ask only one question in response. "
-                       "Let's chat! Ask me what I want"
-        },
-        {
-            "role": "assistant",
-            "content": "Okey-dokey Anton, I hope we both have fun"
-        },
+    messages.append(
         {
             "role": "user",
             "content": prompt
         }
-    ]
+    )
+
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
     generated_ids = model.generate(
         inputs,
@@ -95,8 +90,21 @@ def generate(
         #       integer or null
         top_k=top_k
     )
+
     decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
-    return decoded[0]
+
+    print("1. " + decoded)
+
+    answer = decoded[0]
+
+    messages.append(
+        {
+            "role": "assistant",
+            "content": answer
+        }
+    )
+
+    return answer
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
