@@ -99,7 +99,7 @@ def generate(
 
     messages.append(
         {
-            "role": "user",
+            "role": "assistant",
             "content": answer
         }
     )
