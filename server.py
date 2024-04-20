@@ -63,8 +63,8 @@ def generate(
             "content": prompt
         }
     ]
-    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt")
-    # inputs = tokenized_chat.to(device)
+    tokenized_chat = tokenizer.apply_chat_template(messages, return_tensors="pt")
+    inputs = tokenized_chat.to(device)
 
     outputs = model.generate(
         inputs['input_ids'],
