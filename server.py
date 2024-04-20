@@ -97,12 +97,9 @@ def generate(
         top_k=top_k
     )
 
-    prompt_length = inputs['input_ids'].shape[1]
-    answer = tokenizer.decode(outputs[0][prompt_length:])
-
-    # answer = tokenizer.batch_decode(
-    #     outputs[0][:, inputs.shape[1]:]
-    # )
+    answer = tokenizer.batch_decode(
+        outputs[0][:, inputs.shape[1]:]
+    )
     # answer = tokenizer.batch_decode(
     #     outputs[0][inputs.shape[1]:],
     #     skip_special_tokens=True
