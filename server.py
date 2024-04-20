@@ -98,7 +98,7 @@ def generate(
         top_k=top_k
     )
     answer = tokenizer.decode(
-        outputs[0][-1],
+        outputs[0][0],
         skip_special_tokens=True
     )
     # answer = tokenizer.batch_decode(
