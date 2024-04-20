@@ -100,6 +100,11 @@ def generate(
     #     skip_special_tokens=True
     # )
 
+    print("1----------------")
+    print(inputs.shape[0])
+    print("2----------------")
+    print(outputs[inputs.shape[0]:])
+
     answer = tokenizer.batch_decode(
         outputs[inputs.shape[0]:],
         skip_special_tokens=True
