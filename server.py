@@ -2,6 +2,8 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
+from typing import Union, List
+
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
@@ -93,7 +95,11 @@ def generate(
 
     print(generated_ids)
 
-    decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+    decoded = tokenizer.batch_decode(
+        generated_ids,
+        sequences=Union[List[int], List[List[int]], "np.ndarray", "torch.Tensor", "tf.Tensor"],
+        skip_special_tokens=True
+    )
 
     print(decoded[-1])
 
