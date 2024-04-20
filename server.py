@@ -97,8 +97,12 @@ def generate(
         #       integer or null
         top_k=top_k
     )
-    decoded = tokenizer.batch_decode(outputs, skip_special_tokens=True)
-    return decoded[0]
+    answer = tokenizer.batch_decode(
+        outputs[0][inputs.shape[1]:],
+        skip_special_tokens=True
+    )[0]
+
+    return answer
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
