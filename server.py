@@ -61,13 +61,6 @@ def generate(
 #       We generally recommend altering this or temperature but not both.
         top_p=top_p,
 
-#       integer or null >= 0
-#       Default: null
-#       The maximum number of tokens to generate in the completion.
-#
-#       The token count of your prompt plus max_tokens cannot exceed the model's context length.
-        max_tokens=max_tokens,
-
 #       bool
         do_sample=do_sample
     )
