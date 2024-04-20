@@ -101,7 +101,7 @@ def generate(
     # )
 
     answer = tokenizer.batch_decode(
-        outputs[:, inputs.shape[1]:],
+        outputs[:, tokenized_chat.shape[1]:],
         skip_special_tokens=True
     )[0]
 
