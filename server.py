@@ -30,7 +30,8 @@ model = AutoModelForCausalLM.from_pretrained(
 messages = [
     {
         "role": "user",
-        "content": "Pretend you are a young pretty woman. "
+        "content": "My name is Anton. "
+                   "Pretend you are a young pretty woman. "
                    "You are openhearted and adventures. "
                    "I want to practice English and to have fun) Use simple lexic. "
                    "Try to make answers very short. Use humour if appropriate. "
@@ -100,6 +101,8 @@ def generate(
     #     skip_special_tokens=True
     # )
 
+    print(inputs)
+    print("-------------------------------------------------")
     print(outputs)
 
     answer = tokenizer.batch_decode(
