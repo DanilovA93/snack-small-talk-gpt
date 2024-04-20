@@ -137,18 +137,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         self._set_headers()
 
-        try:
-            answer = process(
-                rq_body['username'],
-                rq_body['prompt'],
-                rq_body.get("max_new_tokens", None),
-                rq_body.get("temperature", None),
-                rq_body.get("top_p", None),
-                rq_body.get("top_k", None)
-            )
-            self.wfile.write(answer.encode())
-        except Exception as err:
-            self.wfile.write(f"Ошибка: {err}".encode())
+        answer = process(
+            rq_body['username'],
+            rq_body['prompt'],
+            rq_body.get("max_new_tokens", None),
+            rq_body.get("temperature", None),
+            rq_body.get("top_p", None),
+            rq_body.get("top_k", None)
+        )
+        self.wfile.write(answer.encode())
 
 
     def do_GET(self):
