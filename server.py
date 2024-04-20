@@ -14,7 +14,7 @@ device = "cuda"
 
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
-    bnb_4bit_use_double_quanlst=True,
+    # bnb_4bit_use_double_quanlst=True,
     bnb_4bit_quant_type="nf4",
     bnb_4bit_compute_dtype=torch.float16
 )
@@ -28,24 +28,58 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 
 
-def generate(test_prompt) -> str:
+def generate(
+        prompt,
+        temperature=0.7,
+        top_p=1.0,
+        max_tokens=None,
+        safe_prompt=False,
+        random_seed=None,
+        do_sample=True
+) -> str:
     messages = [
         {
             "role": "user",
-            "content": test_prompt
+            "content": prompt
         }
     ]
 
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
     generated_ids = model.generate(
         inputs,
-        max_tokens=50,          # Response text length.
-        temperature=0.6,        # Ranges from 0 to 2, lower values ==> Determinism, Higher Values ==> Randomness
-        top_p=1,                # Ranges 0 to 1. Controls the pool of tokens.  Lower ==> Narrower selection of words
-        frequency_penalty=0,    # used to discourage the model from repeating the same words or phrases too frequently within the generated text
-        presence_penalty=0,     # used to encourage the model to include a diverse range of tokens in the generated text.
-        do_sample=True,
-        prompt_template="<s>[INST] {prompt} [/INST] "
+
+#       number or null [ 0 .. 1 ]
+#       Default: 0.7
+#       What sampling temperature to use, between 0.0 and 1.0. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
+#
+#       We generally recommend altering this or top_p but not both.
+        temperature=temperature,
+#       number or null [ 0 .. 1 ]
+#       Default: 1
+#       Nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+#
+#       We generally recommend altering this or temperature but not both.
+        top_p=top_p,
+
+#       integer or null >= 0
+#       Default: null
+#       The maximum number of tokens to generate in the completion.
+#
+#       The token count of your prompt plus max_tokens cannot exceed the model's context length.
+        max_tokens=max_tokens,
+
+#       boolean
+#       Default: false
+#       Whether to inject a safety prompt before all conversations.
+        safe_prompt=safe_prompt,
+
+#       integer
+#       Default: null
+#       The seed to use for random sampling. If set, different calls will generate deterministic results.
+        random_seed=random_seed,
+
+#       ?
+        do_sample=do_sample
     )
     decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
     return decoded[0]
@@ -62,10 +96,19 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
-        message = json.loads(self.rfile.read(content_len))
-        prompt = message['prompt']
+        rq_body = json.loads(self.rfile.read(content_len))
+        answer = generate(
+            rq_body['prompt'],
+            rq_body['temperature'],
+            rq_body['top_p'],
+            rq_body['max_tokens'],
+            rq_body['safe_prompt'],
+            rq_body['random_seed'],
+            rq_body['do_sample']
+        )
+
         self._set_headers()
-        self.wfile.write(generate(prompt).encode())
+        self.wfile.write(answer.encode())
 
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
