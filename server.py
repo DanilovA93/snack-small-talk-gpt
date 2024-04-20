@@ -62,7 +62,9 @@ def generate(
     )
 
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
-    generated_ids = model.generate(
+    prompt_length = inputs['input_ids'].shape[1]
+
+    outputs = model.generate(
         inputs,
 
         #       integer or null >= 0
@@ -93,17 +95,13 @@ def generate(
         top_k=top_k
     )
 
-    print(generated_ids)
-
-    decoded = tokenizer.batch_decode(
-        generated_ids,
-        sequences=Union[List[int], List[List[int]], "np.ndarray", "torch.Tensor", "tf.Tensor"],
-        skip_special_tokens=True
+    answer = tokenizer.decode(
+        outputs[0][prompt_length:]
+        # skip_special_tokens=True
     )
 
-    print(decoded[-1])
 
-    answer = decoded[0]
+    print(answer)
 
     messages.append(
         {
