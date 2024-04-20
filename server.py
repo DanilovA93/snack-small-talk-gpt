@@ -39,9 +39,13 @@ def generate(test_prompt) -> str:
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
     generated_ids = model.generate(
         inputs,
-        max_new_tokens=50,
-        temperature=0.1,
-        do_sample=True
+        max_tokens=50,          # Response text length.
+        temperature=0.6,        # Ranges from 0 to 2, lower values ==> Determinism, Higher Values ==> Randomness
+        top_p=1,                # Ranges 0 to 1. Controls the pool of tokens.  Lower ==> Narrower selection of words
+        frequency_penalty=0,    # used to discourage the model from repeating the same words or phrases too frequently within the generated text
+        presence_penalty=0,     # used to encourage the model to include a diverse range of tokens in the generated text.
+        do_sample=True,
+        prompt_template="<s>[INST] {prompt} [/INST] "
     )
     decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
     return decoded[0]
