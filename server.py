@@ -101,11 +101,10 @@ def generate(
     print("------------------------------------")
     print(outputs)
     print("------------------------------------")
-    print(outputs[inputs.shape[0]:])
-
+    print(outputs[:, inputs.shape[1]:])
 
     answer = tokenizer.batch_decode(
-        outputs[inputs.shape[0]:]
+        outputs[:, inputs.shape[-1]:]
     )[0]
     # answer = tokenizer.batch_decode(
     #     outputs[0][:, inputs.shape[1]:]
