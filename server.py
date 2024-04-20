@@ -30,23 +30,26 @@ model = AutoModelForCausalLM.from_pretrained(
 
 def generate(
         prompt,
+        max_tokens=50,
+        do_sample=True,
         temperature=0.7,
         top_p=1.0,
-        max_tokens=None,
-        safe_prompt=False,
-        random_seed=None,
-        do_sample=True
+        top_k=40,
 ) -> str:
-    messages = [
-        {
-            "role": "user",
-            "content": prompt
-        }
-    ]
-
+    messages = [{"role": "user","content": prompt}]
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
     generated_ids = model.generate(
         inputs,
+
+#       integer or null >= 0
+#       Default: null
+#       The maximum number of tokens to generate in the completion.
+#
+#       The token count of your prompt plus max_tokens cannot exceed the model's context length.
+        max_tokens=max_tokens,
+
+#       bool
+        do_sample=do_sample,
 
 #       number or null [ 0 .. 1 ]
 #       Default: 0.7
@@ -54,6 +57,7 @@ def generate(
 #
 #       We generally recommend altering this or top_p but not both.
         temperature=temperature,
+
 #       number or null [ 0 .. 1 ]
 #       Default: 1
 #       Nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
@@ -61,8 +65,8 @@ def generate(
 #       We generally recommend altering this or temperature but not both.
         top_p=top_p,
 
-#       bool
-        do_sample=do_sample
+#       integer or null
+        top_k=top_k
     )
     decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
     return decoded[0]
@@ -82,12 +86,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         rq_body = json.loads(self.rfile.read(content_len))
         answer = generate(
             rq_body['prompt'],
+            rq_body['max_tokens'],
+            rq_body['do_sample'],
             rq_body['temperature'],
             rq_body['top_p'],
-            rq_body['max_tokens'],
-            rq_body['safe_prompt'],
-            rq_body['random_seed'],
-            rq_body['do_sample']
+            rq_body['top_k']
         )
 
         self._set_headers()
