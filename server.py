@@ -101,7 +101,7 @@ def generate(
         outputs[:, inputs.shape[1]:]
     )[0]
 
-    answer = gen_answer[0:, -3]
+    answer = gen_answer[:-4]
 
     print(gen_answer)
     print(answer)
