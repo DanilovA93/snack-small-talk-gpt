@@ -98,7 +98,7 @@ def generate(
     )
 
     answer = tokenizer.batch_decode(
-        outputs[0][:, inputs.shape[1]:]
+        outputs[:, inputs.shape[1]:]
     )
     # answer = tokenizer.batch_decode(
     #     outputs[0][inputs.shape[1]:],
