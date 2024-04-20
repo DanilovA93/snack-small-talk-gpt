@@ -10,22 +10,11 @@ access_token = "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"
 device = "cuda"
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 
-messages = [
-    {
-        "role": "user",
-        "content": "Pretend you are a young pretty woman. "
-                   "You are openhearted and adventures. "
-                   "I want to practice English and to have fun) Use simple lexic. "
-                   "Try to make answers very short. Use humour if appropriate. "
-                   "If you ask question, ask only one question in response. "
-                   "Let's chat! Ask me what I want"
-    },
-    {
-        "role": "assistant",
-        "content": "Okey-dokey, i hope we both have fun"
-    }
-
-]
+#   create an empty with chats
+#
+#   key -   is username
+#   value - is chat story array with dicts [{"",""}]
+chats_dict = {}
 
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -41,7 +30,32 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 
 
-def generate(
+def start_chat():
+    return [
+        {
+            "role": "user",
+            "content": "Pretend you are a young pretty woman. "
+                       "You are openhearted and adventures. "
+                       "I want to practice English and to have fun) Use simple lexic. "
+                       "Try to make answers very short. Use humour if appropriate. "
+                       "If you ask question, ask only one question in response. "
+                       "Let's chat! Ask me what I want"
+        },
+        {
+            "role": "assistant",
+            "content": "Okey-dokey, i hope we both have fun"
+        }
+    ]
+
+
+def get_chat(username):
+    if username not in chats_dict:
+        chats_dict[username] = start_chat()
+    return chats_dict[username]
+
+
+def process(
+        username,
         prompt,
         max_new_tokens=100,
         do_sample=True,
@@ -49,6 +63,8 @@ def generate(
         top_p=1.0,
         top_k=40,
 ) -> str:
+
+    messages = get_chat(username)
 
     messages.append(
         {
@@ -119,7 +135,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
         rq_body = json.loads(self.rfile.read(content_len))
-        answer = generate(
+        answer = process(
+            rq_body['username'],
             rq_body['prompt'],
             rq_body['max_new_tokens'],
             rq_body['do_sample'],
