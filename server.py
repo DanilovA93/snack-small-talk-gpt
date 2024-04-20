@@ -61,7 +61,7 @@ def generate(
         }
     )
 
-    rrr = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
+    rrr = tokenizer.apply_chat_template(messages, return_tensors="pt")
     inputs = rrr.to(device)
     prompt_length = rrr['input_ids'].shape[1]
 
