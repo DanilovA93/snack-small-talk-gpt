@@ -68,17 +68,7 @@ def generate(
 #       The token count of your prompt plus max_tokens cannot exceed the model's context length.
         max_tokens=max_tokens,
 
-#       boolean
-#       Default: false
-#       Whether to inject a safety prompt before all conversations.
-        safe_prompt=safe_prompt,
-
-#       integer
-#       Default: null
-#       The seed to use for random sampling. If set, different calls will generate deterministic results.
-        random_seed=random_seed,
-
-#       ?
+#       bool
         do_sample=do_sample
     )
     decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
