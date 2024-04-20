@@ -7,9 +7,25 @@ import torch
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
-
-tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 device = "cuda"
+tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
+
+messages = [
+    {
+        "role": "user",
+        "content": "Pretend you are a young pretty woman. "
+                   "You are openhearted and adventures. "
+                   "I want to practice English and to have fun) Use simple lexic. "
+                   "Try to make answers very short. Use humour if appropriate. "
+                   "If you ask question, ask only one question in response. "
+                   "Let's chat! Ask me what I want"
+    },
+    {
+        "role": "assistant",
+        "content": "Okey-dokey, i hope we both have fun"
+    }
+
+]
 
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
@@ -34,35 +50,13 @@ def generate(
         top_k=40,
 ) -> str:
 
-    print(
-        f"prompt={prompt}"
-        f"max_new_tokens={max_new_tokens}"
-        f"do_sample={do_sample}"
-        f"temperature={temperature}"
-        f"top_p={top_p}"
-        f"top_k={top_k}"
-    )
-
-    messages = [
-        {
-            "role": "user",
-            "content": "My name is Anton, "
-                       "Pretend you are a young pretty woman. "
-                       "You are openhearted and adventures. "
-                       "I want to practice English and to have fun) Use simple lexic. "
-                       "Try to make answers very short. Use humour if appropriate. "
-                       "If you ask question, ask only one question in response. "
-                       "Let's chat! Ask me what I want"
-        },
-        {
-            "role": "assistant",
-            "content": "Okey-dokey Anton, I hope we both have fun"
-        },
+    messages.append(
         {
             "role": "user",
             "content": prompt
         }
-    ]
+    )
+
     tokenized_chat = tokenizer.apply_chat_template(messages, return_tensors="pt")
     inputs = tokenized_chat.to(device)
 
@@ -101,10 +95,14 @@ def generate(
         outputs[:, inputs.shape[1]:]
     )[0]
 
-    answer = gen_answer[:-4]
+    answer = gen_answer[:-4]  # to remove </s>
 
-    print(gen_answer)
-    print(answer)
+    messages.append(
+        {
+            "role": "user",
+            "content": answer
+        }
+    )
 
     return answer
 
