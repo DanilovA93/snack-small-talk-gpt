@@ -36,7 +36,11 @@ def generate(
         top_p=1.0,
         top_k=40,
 ) -> str:
-    messages = [{"role": "user","content": prompt}]
+    messages = [
+        {"role": "user","content": "you are a pirate, and answer like a pirate"},
+        {"role": "assistant","content": "yarrr, lets do it my friend"},
+        {"role": "user","content": prompt}
+    ]
     inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
     generated_ids = model.generate(
         inputs,
@@ -45,7 +49,7 @@ def generate(
 #       Default: null
 #       The maximum number of tokens to generate in the completion.
 #
-#       The token count of your prompt plus max_tokens cannot exceed the model's context length.
+#       The token count of your prompt plus max_new_tokens cannot exceed the model's context length.
         max_new_tokens=max_new_tokens,
 
 #       bool
