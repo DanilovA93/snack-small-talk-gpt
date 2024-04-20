@@ -34,6 +34,16 @@ def generate(
         top_p=1.0,
         top_k=40,
 ) -> str:
+
+    print(
+        f"prompt={prompt}"
+        f"max_new_tokens={max_new_tokens}"
+        f"do_sample={do_sample}"
+        f"temperature={temperature}"
+        f"top_p={top_p}"
+        f"top_k={top_k}"
+    )
+
     messages = [
         {
             "role": "user",
