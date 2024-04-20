@@ -97,15 +97,16 @@ def generate(
         top_k=top_k
     )
 
-    answer = tokenizer.batch_decode(
+    gen_answer = tokenizer.batch_decode(
         outputs[:, inputs.shape[1]:]
-    )
-    # answer = tokenizer.batch_decode(
-    #     outputs[0][inputs.shape[1]:],
-    #     skip_special_tokens=True
-    # )
+    )[0]
 
-    return answer[0]
+    answer = gen_answer[0:, -3]
+
+    print(gen_answer)
+    print(answer)
+
+    return answer
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
