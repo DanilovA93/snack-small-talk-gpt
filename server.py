@@ -120,8 +120,6 @@ def process(
         }
     )
 
-    print(chats_dict)
-
     return answer
 
 
@@ -143,7 +141,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             rq_body['max_new_tokens'],
             rq_body['do_sample'],
             rq_body['temperature'],
-            rq_body['top_p'],
+            rq_body.get("top_p", None),
             rq_body['top_k']
         )
 
