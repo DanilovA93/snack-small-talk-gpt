@@ -58,7 +58,6 @@ def process(
         username,
         prompt,
         max_new_tokens=100,
-        do_sample=True,
         temperature=0.7,
         top_p=1.0,
         top_k=40,
@@ -87,7 +86,7 @@ def process(
         max_new_tokens=max_new_tokens,
 
         #       bool
-        do_sample=do_sample,
+        do_sample=True,
 
         #       number or null [ 0 .. 1 ]
         #       Default: 0.7
@@ -135,18 +134,22 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
         rq_body = json.loads(self.rfile.read(content_len))
-        answer = process(
-            rq_body['username'],
-            rq_body['prompt'],
-            rq_body['max_new_tokens'],
-            rq_body['do_sample'],
-            rq_body['temperature'],
-            rq_body.get("top_p", None),
-            rq_body['top_k']
-        )
 
         self._set_headers()
-        self.wfile.write(answer.encode())
+
+        try:
+            answer = process(
+                rq_body['username'],
+                rq_body['prompt'],
+                rq_body.get("max_new_tokens", None),
+                rq_body.get("temperature", None),
+                rq_body.get("top_p", None),
+                rq_body.get("top_k", None)
+            )
+            self.wfile.write(answer.encode())
+        except Exception as err:
+            self.wfile.write(f"Ошибка: {err}".encode())
+
 
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
