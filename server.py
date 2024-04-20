@@ -5,7 +5,6 @@ from http import HTTPStatus
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
-
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 
@@ -18,7 +17,6 @@ quantization_config = BitsAndBytesConfig(
     bnb_4bit_quant_type="nf4",
     bnb_4bit_compute_dtype=torch.float16
 )
-
 
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
@@ -37,39 +35,58 @@ def generate(
         top_k=40,
 ) -> str:
     messages = [
-        {"role": "user","content": "you are a pirate, and answer like a pirate"},
-        {"role": "assistant","content": "yarrr, lets do it my friend"},
-        {"role": "user","content": prompt}
+        {
+            "role": "user",
+            "content": "My name is Anton, "
+                       "Pretend you are a young pretty woman. "
+                       "You are openhearted and adventures. "
+                       "I want to practice English and to have fun) Use simple lexic. "
+                       "Try to make answers very short. Use humour if appropriate. "
+                       "If you ask question, ask only one question in response. "
+                       "Let's chat! Ask me what I want"
+        },
+        {
+            "role": "assistant",
+            "content": "Okey-dokey Anton, I hope we both have fun"
+        },
+        {
+            "role": "user",
+            "content": prompt
+        }
     ]
-    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
+    inputs = tokenizer.apply_chat_template(
+        messages,
+        return_tensors="pt",
+        tokenize=False
+    ).to(device)
     generated_ids = model.generate(
         inputs,
 
-#       integer or null >= 0
-#       Default: null
-#       The maximum number of tokens to generate in the completion.
-#
-#       The token count of your prompt plus max_new_tokens cannot exceed the model's context length.
+        #       integer or null >= 0
+        #       Default: null
+        #       The maximum number of tokens to generate in the completion.
+        #
+        #       The token count of your prompt plus max_new_tokens cannot exceed the model's context length.
         max_new_tokens=max_new_tokens,
 
-#       bool
+        #       bool
         do_sample=do_sample,
 
-#       number or null [ 0 .. 1 ]
-#       Default: 0.7
-#       What sampling temperature to use, between 0.0 and 1.0. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
-#
-#       We generally recommend altering this or top_p but not both.
+        #       number or null [ 0 .. 1 ]
+        #       Default: 0.7
+        #       What sampling temperature to use, between 0.0 and 1.0. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
+        #
+        #       We generally recommend altering this or top_p but not both.
         temperature=temperature,
 
-#       number or null [ 0 .. 1 ]
-#       Default: 1
-#       Nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
-#
-#       We generally recommend altering this or temperature but not both.
+        #       number or null [ 0 .. 1 ]
+        #       Default: 1
+        #       Nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+        #
+        #       We generally recommend altering this or temperature but not both.
         top_p=top_p,
 
-#       integer or null
+        #       integer or null
         top_k=top_k
     )
     decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
