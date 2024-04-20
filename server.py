@@ -104,8 +104,7 @@ def generate(
     print(outputs[0][inputs.shape[1]:])
 
     answer = tokenizer.decode(
-        outputs[0][inputs.shape[1]:],
-        skip_special_tokens=True
+        outputs[0][inputs.shape[1]:]
     )
     # answer = tokenizer.batch_decode(
     #     outputs[0][inputs.shape[1]:],
