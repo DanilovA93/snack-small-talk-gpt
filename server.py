@@ -13,7 +13,6 @@ device = "cuda"
 
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
-    # bnb_4bit_use_double_quanlst=True,
     bnb_4bit_quant_type="nf4",
     bnb_4bit_compute_dtype=torch.float16
 )
@@ -68,7 +67,7 @@ def generate(
     # inputs = tokenized_chat.to(device)
 
     outputs = model.generate(
-        inputs,
+        inputs['input_ids'],
 
         #       integer or null >= 0
         #       Default: null
@@ -98,14 +97,9 @@ def generate(
         top_k=top_k
     )
 
-    print("------------------------------------")
-    print(outputs)
-    print("------------------------------------")
-    print(outputs[:, inputs.shape[1]:])
+    prompt_length = inputs['input_ids'].shape[1]
+    answer = tokenizer.decode(outputs[0][prompt_length:])
 
-    answer = tokenizer.batch_decode(
-        outputs[:, inputs.shape[-1]:]
-    )[0]
     # answer = tokenizer.batch_decode(
     #     outputs[0][:, inputs.shape[1]:]
     # )
