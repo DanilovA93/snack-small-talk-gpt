@@ -64,8 +64,10 @@ def generate(
             "content": prompt
         }
     ]
-    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(device)
-    generated_ids = model.generate(
+    tokenized_chat = tokenizer.apply_chat_template(messages, return_tensors="pt")
+    inputs = tokenized_chat.to(device)
+
+    outputs = model.generate(
         inputs,
 
         #       integer or null >= 0
@@ -95,7 +97,7 @@ def generate(
         #       integer or null
         top_k=top_k
     )
-    decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
+    decoded = tokenizer.batch_decode(outputs, skip_special_tokens=True)
     return decoded[0]
 
 
