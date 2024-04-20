@@ -99,9 +99,9 @@ def generate(
     )
 
     print("------------------------------------")
-    print(outputs[0])
+    print(outputs)
     print("------------------------------------")
-    print(outputs[0][inputs.shape[1]:])
+    print(outputs[:, inputs.shape[1]:])
 
 
     answer = tokenizer.batch_decode(
