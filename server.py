@@ -105,7 +105,7 @@ def generate(
     # )[0]
 
     answer = tokenizer.batch_decode(
-        outputs[:, inputs.shape[1]:]
+        outputs[:, inputs.shape[0]:]
     )[0]
 
     print(answer)
