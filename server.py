@@ -27,7 +27,7 @@ model = AutoModelForCausalLM.from_pretrained(
 
 def generate(
         prompt,
-        max_new_tokens=50,
+        max_new_tokens=100,
         do_sample=True,
         temperature=0.7,
         top_p=1.0,
@@ -67,7 +67,7 @@ def generate(
     inputs = tokenized_chat.to(device)
 
     outputs = model.generate(
-        inputs['input_ids'],
+        inputs,
 
         #       integer or null >= 0
         #       Default: null
