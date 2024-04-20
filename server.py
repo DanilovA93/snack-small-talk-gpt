@@ -91,9 +91,11 @@ def generate(
         top_k=top_k
     )
 
+    print(generated_ids)
+
     decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
 
-    print(decoded[1])
+    print(decoded[-1])
 
     answer = decoded[0]
 
