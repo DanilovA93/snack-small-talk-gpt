@@ -93,7 +93,7 @@ def generate(
 
     decoded = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)
 
-    print(decoded[-1])
+    print(decoded[-1]['generated_text'][-1])
 
     answer = decoded[0]
 
