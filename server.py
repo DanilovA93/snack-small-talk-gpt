@@ -30,7 +30,7 @@ model = AutoModelForCausalLM.from_pretrained(
 
 def generate(
         prompt,
-        max_tokens=50,
+        max_new_tokens=50,
         do_sample=True,
         temperature=0.7,
         top_p=1.0,
@@ -46,7 +46,7 @@ def generate(
 #       The maximum number of tokens to generate in the completion.
 #
 #       The token count of your prompt plus max_tokens cannot exceed the model's context length.
-        max_tokens=max_tokens,
+        max_new_tokens=max_new_tokens,
 
 #       bool
         do_sample=do_sample,
@@ -86,7 +86,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         rq_body = json.loads(self.rfile.read(content_len))
         answer = generate(
             rq_body['prompt'],
-            rq_body['max_tokens'],
+            rq_body['max_new_tokens'],
             rq_body['do_sample'],
             rq_body['temperature'],
             rq_body['top_p'],
