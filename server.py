@@ -120,6 +120,8 @@ def process(
         }
     )
 
+    print(chats_dict)
+
     return answer
 
 
