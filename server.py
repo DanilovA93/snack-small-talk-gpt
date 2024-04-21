@@ -50,7 +50,7 @@ def start_chat():
         },
         {
             "role": "user",
-            "content": "I want to practice English and to have fun) Use simple lexic. "
+            "content": "I want to practice English and to have fun) Use simple lexic"
         },
         {
             "role": "assistant",
@@ -58,15 +58,15 @@ def start_chat():
         },
         {
             "role": "user",
-            "content": "Try to make answers very short. Use humour if appropriate. "
+            "content": "Try to make answers very short, 10 words maximum. Use humour if appropriate"
         },
         {
             "role": "assistant",
-            "content": "Okey-dokey"
+            "content": "Okey-dokey, 10 words"
         },
         {
             "role": "user",
-            "content": "If you ask question, ask only one question in response. "
+            "content": "If you ask question, ask only one question in response"
         },
         {
             "role": "assistant",
@@ -74,7 +74,7 @@ def start_chat():
         },
         {
             "role": "user",
-            "content": "Let's chat! Ask me what I want"
+            "content": "Let's chat! Ask me what i want"
         },
         {
             "role": "assistant",
