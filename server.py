@@ -136,7 +136,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
         rq_body = json.loads(self.rfile.read(content_len))
-        print('Rq body: ', rq_body)
+        print('Тело запроса: ', rq_body)
 
         self._set_headers()
         try:
