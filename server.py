@@ -8,7 +8,6 @@ import torch
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 device = "cuda"
-tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
 chat_story_length = 30
 
 #   create an empty with chats
@@ -19,6 +18,7 @@ chats_dict = {}
 
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
+    bnb_4bit_use_double_quant=False,
     bnb_4bit_quant_type="nf4",
     bnb_4bit_compute_dtype=torch.float16
 )
@@ -29,6 +29,15 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.float16,
     quantization_config=quantization_config
 )
+model.config.use_cache = False # silence the warnings. Please re-enable for inference!
+model.config.pretraining_tp = 1
+model.gradient_checkpointing_enable()
+
+tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
+tokenizer.padding_side = 'right'
+tokenizer.pad_token = tokenizer.eos_token
+tokenizer.add_eos_token = True
+tokenizer.add_bos_token, tokenizer.add_eos_token
 
 
 def start_chat():
