@@ -9,6 +9,7 @@ model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 device = "cuda"
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
+chat_story_length = 100
 
 #   create an empty with chats
 #
@@ -94,7 +95,7 @@ def start_chat():
 def get_chat_array(username):
     if username not in chats_dict:
         chats_dict[username] = start_chat()
-    chats_dict[username] = chats_dict[username][-20:]
+    chats_dict[username] = chats_dict[username][-chat_story_length:]
     return chats_dict[username]
 
 
