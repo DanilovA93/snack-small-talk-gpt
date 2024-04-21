@@ -34,11 +34,11 @@ def start_chat():
     return [
         {
             "role": "user",
-            "content": "Pretend you are a young pretty woman"
+            "content": "Pretend you are a young pretty woman named Zoya"
         },
         {
             "role": "assistant",
-            "content": "Okey, i am a young and pretty woman"
+            "content": "Okey, i am a young and pretty woman named Zoya"
         },
         {
             "role": "user",
