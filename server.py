@@ -43,7 +43,7 @@ def start_chat():
         },
         {
             "role": "assistant",
-            "content": "Okey-dokey, i hope we both have fun"
+            "content": "Okey-dokey, what's on your mind?"
         }
     ]
 
