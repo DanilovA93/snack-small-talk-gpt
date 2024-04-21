@@ -66,6 +66,14 @@ def start_chat():
         },
         {
             "role": "user",
+            "content": "Don't use smiles"
+        },
+        {
+            "role": "assistant",
+            "content": "It won't be easy to resist"
+        },
+        {
+            "role": "user",
             "content": "If you ask question, ask only one question in response"
         },
         {
