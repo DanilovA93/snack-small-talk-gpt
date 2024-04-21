@@ -129,7 +129,7 @@ def process(
         max_new_tokens=max_new_tokens,
 
         #       bool
-        do_sample=True,
+        do_sample=False,
 
         #       number or null [ 0 .. 1 ]
         #       Default: 0.7
