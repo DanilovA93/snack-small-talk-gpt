@@ -91,9 +91,10 @@ def start_chat():
     ]
 
 
-def get_chat(username):
+def get_chat_array(username):
     if username not in chats_dict:
         chats_dict[username] = start_chat()
+    chats_dict[username] = chats_dict[username][-20:]
     return chats_dict[username]
 
 
@@ -106,7 +107,7 @@ def process(
         top_k=40,
 ) -> str:
 
-    messages = get_chat(username)
+    messages = get_chat_array(username)
 
     messages.append(
         {
