@@ -9,7 +9,7 @@ model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 device = "cuda"
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
-chat_story_length = 100
+chat_story_length = 30
 
 #   create an empty with chats
 #
