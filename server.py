@@ -102,7 +102,9 @@ def process(
         #       We generally recommend altering this or temperature but not both.
         top_p=top_p,
 
-        #       integer or null
+        #       number or null [ 0 .. 200 ]
+        #       Default: 50
+        #       Controls the number of most-likely candidates that the model considers for the next token.
         top_k=top_k
     )
 
