@@ -117,7 +117,14 @@ def process(
         }
     )
 
-    tokenized_chat = tokenizer.apply_chat_template(messages, return_tensors="pt")
+    not_stored_message = {
+        {
+            "role": "user",
+            "content": prompt
+        }
+    }
+
+    tokenized_chat = tokenizer.apply_chat_template(not_stored_message, return_tensors="pt")
     inputs = tokenized_chat.to(device)
 
     outputs = model.generate(
