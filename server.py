@@ -58,11 +58,11 @@ def start_chat():
         },
         {
             "role": "user",
-            "content": "Try to make answers very short, 10 words maximum. Use humour if appropriate"
+            "content": "Try to make answers very short, 15 words maximum. Use humour if appropriate"
         },
         {
             "role": "assistant",
-            "content": "Okey-dokey, 10 words"
+            "content": "Okey-dokey, 15 words"
         },
         {
             "role": "user",
