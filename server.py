@@ -2,7 +2,8 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from peft import LoraConfig, PeftModel, prepare_model_for_kbit_training, get_peft_model
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, pipeline
 import torch
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
@@ -38,6 +39,18 @@ tokenizer.padding_side = 'right'
 tokenizer.pad_token = tokenizer.eos_token
 tokenizer.add_eos_token = True
 tokenizer.add_bos_token, tokenizer.add_eos_token
+
+model = prepare_model_for_kbit_training(model)
+peft_config = LoraConfig(
+    lora_alpha=16,
+    lora_dropout=0.1,
+    r=64,
+    bias="none",
+    task_type="CAUSAL_LM",
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj","gate_proj"]
+)
+# get_peft_model returns a Peft model object from a model and a config.
+model = get_peft_model(model, peft_config)
 
 
 def start_chat():
@@ -117,72 +130,9 @@ def process(
         top_k=40,
 ) -> str:
 
-    messages = get_chat_array(username)
+    pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=200)
+    return pipe(f"<s>[INST] {prompt} [/INST]")
 
-    messages.append(
-        {
-            "role": "user",
-            "content": prompt
-        }
-    )
-
-    not_stored_messages = [
-        {
-            "role": "user",
-            "content": prompt
-        }
-    ]
-
-    tokenized_chat = tokenizer.apply_chat_template(not_stored_messages, return_tensors="pt")
-    inputs = tokenized_chat.to(device)
-
-    outputs = model.generate(
-        inputs,
-
-        #       integer or null >= 0
-        #       Default: null
-        #       The maximum number of tokens to generate in the completion.
-        #
-        #       The token count of your prompt plus max_new_tokens cannot exceed the model's context length.
-        max_new_tokens=max_new_tokens,
-
-        #       bool
-        do_sample=False,
-
-        #       number or null [ 0 .. 1 ]
-        #       Default: 0.7
-        #       What sampling temperature to use, between 0.0 and 1.0. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
-        #
-        #       We generally recommend altering this or top_p but not both.
-        temperature=temperature,
-
-        #       number or null [ 0 .. 1 ]
-        #       Default: 1
-        #       Nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
-        #
-        #       We generally recommend altering this or temperature but not both.
-        top_p=top_p,
-
-        #       number or null [ 0 .. 200 ]
-        #       Default: 50
-        #       Controls the number of most-likely candidates that the model considers for the next token.
-        top_k=top_k
-    )
-
-    gen_answer = tokenizer.batch_decode(
-        outputs[:, inputs.shape[1]:]
-    )[0]
-
-    answer = gen_answer[:-4]  # to remove </s>
-
-    messages.append(
-        {
-            "role": "assistant",
-            "content": answer
-        }
-    )
-
-    return answer
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
