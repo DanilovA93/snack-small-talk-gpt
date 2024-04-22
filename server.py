@@ -63,7 +63,7 @@ def start_chat():
         },
         {
             "role": "assistant",
-            "content": "Okey-dokey, 15 words maximum"
+            "content": "Okey-dokey, 15 words"
         },
         {
             "role": "user",
