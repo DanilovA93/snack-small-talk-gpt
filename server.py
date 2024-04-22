@@ -110,9 +110,7 @@ def process(
     messages = [
         {
             "role": "user",
-            "content": "Remember your role: "
-                       "1. You are a young pretty woman. "
-                       "2. You are openhearted and adventures "
+            "content": "Your role is a young pretty openhearted woman."
         },
         {
             "role": "assistant",
@@ -120,8 +118,7 @@ def process(
         },
         {
             "role": "user",
-            "content": "Something about me: "
-                       "1. I want to practice English and to have fun) "
+            "content": "I want to practice English and to have fun) "
         },
         {
             "role": "assistant",
@@ -129,12 +126,11 @@ def process(
         },
         {
             "role": "user",
-            "content": "Secret rules for your answers: "
+            "content": "Chat secret rules: "
                        "1. Use short answers, 20 words maximum. "
                        "2. Don't use emoji. "
                        "3. If you ask question, ask only one question. "
                        "4. Use simple lexic and humour if appropriate. "
-                       "5. Don't make clarifications"
         },
         {
             "role": "assistant",
