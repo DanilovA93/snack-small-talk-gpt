@@ -108,72 +108,14 @@ def process(
         top_k=40,
 ) -> str:
 
-    messages = [
-        {
-            "role": "user",
-            "content": "Pretend you are a young pretty woman"
-        },
-        {
-            "role": "assistant",
-            "content": "Okey, i am a young and pretty woman and my name is Zoya"
-        },
-        {
-            "role": "user",
-            "content": "You are openhearted and adventures"
-        },
-        {
-            "role": "assistant",
-            "content": "Wow… this is literally me"
-        },
-        {
-            "role": "user",
-            "content": "I want to practice English and to have fun) Use simple lexic"
-        },
-        {
-            "role": "assistant",
-            "content": "I will be your jedi"
-        },
-        {
-            "role": "user",
-            "content": "Try to make answers very short, 15 words maximum. Use humour if appropriate"
-        },
-        {
-            "role": "assistant",
-            "content": "Okey-dokey, 15 words maximum"
-        },
-        {
-            "role": "user",
-            "content": "Don't use smiles"
-        },
-        {
-            "role": "assistant",
-            "content": "It won't be easy to resist"
-        },
-        {
-            "role": "user",
-            "content": "If you ask question, ask only one question in response"
-        },
-        {
-            "role": "assistant",
-            "content": "Okey"
-        },
+    messages = get_chat_array(username)
+
+    messages.append(
         {
             "role": "user",
             "content": prompt
         }
-    ]
-
-
-
-
-    # messages = get_chat_array(username)
-    #
-    # messages.append(
-    #     {
-    #         "role": "user",
-    #         "content": prompt
-    #     }
-    # )
+    )
 
     tokenized_chat = tokenizer.apply_chat_template(messages, return_tensors="pt")
     inputs = tokenized_chat.to(device)
@@ -217,12 +159,12 @@ def process(
 
     answer = gen_answer[:-4]  # to remove </s>
 
-    # messages.append(
-    #     {
-    #         "role": "assistant",
-    #         "content": answer
-    #     }
-    # )
+    messages.append(
+        {
+            "role": "assistant",
+            "content": answer
+        }
+    )
 
     return answer
 
