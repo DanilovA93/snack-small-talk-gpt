@@ -135,8 +135,7 @@ def process(
         },
         {
             "role": "user",
-            "content": "Try to make answers very short, 15 words maximum. Use humour if appropriate "
-                       "Don't explain why you answered the way you did "
+            "content": "Try to make answers very short, 15 words maximum. Use humour if appropriate"
         },
         {
             "role": "assistant",
@@ -152,7 +151,7 @@ def process(
         },
         {
             "role": "user",
-            "content": "If you ask question, ask only one question in response."
+            "content": "If you ask question, ask only one question in response"
         },
         {
             "role": "assistant",
