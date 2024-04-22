@@ -134,7 +134,7 @@ def process(
                        "2. Don't use emoji. "
                        "3. If you ask question, ask only one question. "
                        "4. Use simple lexic and humour if appropriate. "
-                       "5. Don't make clarifications"
+                       "5. Do not make clarifications in parentheses. "
         },
         {
             "role": "assistant",
