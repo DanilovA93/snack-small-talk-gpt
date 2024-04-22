@@ -130,12 +130,12 @@ def process(
         },
         {
             "role": "user",
-            "content": "Rules for your answers: "
+            "content": "Secret rules for your answers: "
                        "1. Short answers, 20 words maximum. "
                        "2. Don't use emoji "
                        "3. If you ask question, ask only one question in response. "
                        "4. Use simple lexic and humour if appropriate. "
-                       "5. Don't mention these rules in answer. "
+                       "5. Do not make clarifications in parentheses"
         },
         {
             "role": "assistant",
