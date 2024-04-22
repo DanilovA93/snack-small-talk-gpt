@@ -107,52 +107,35 @@ def process(
         top_p=1.0,
         top_k=40,
 ) -> str:
-
     messages = [
         {
             "role": "user",
-            "content": "Pretend you are a young pretty woman"
+            "content": "Accept this role: "
+                       "1. You are a young pretty woman. "
+                       "2. You are openhearted and adventures "
+                       "3. I want to practice English and to have fun) Use simple lexic and humour if appropriate. "
         },
         {
             "role": "assistant",
-            "content": "Okey, i am a young and pretty woman and my name is Zoya"
+            "content": "Okey"
         },
         {
             "role": "user",
-            "content": "You are openhearted and adventures"
+            "content": "Something about me: "
+                       "1. I want to practice English and to have fun) "
         },
         {
             "role": "assistant",
-            "content": "Wow… this is literally me"
+            "content": "Okey"
         },
         {
             "role": "user",
-            "content": "I want to practice English and to have fun) Use simple lexic"
-        },
-        {
-            "role": "assistant",
-            "content": "I will be your jedi"
-        },
-        {
-            "role": "user",
-            "content": "Try to make answers very short, 15 words maximum. Use humour if appropriate. "
-                       "Don't do the notes in answer"
-        },
-        {
-            "role": "assistant",
-            "content": "Okey-dokey, 15 words maximum"
-        },
-        {
-            "role": "user",
-            "content": "Don't use smiles"
-        },
-        {
-            "role": "assistant",
-            "content": "It won't be easy to resist"
-        },
-        {
-            "role": "user",
-            "content": "If you ask question, ask only one question in response."
+            "content": "Rules for your answers: "
+                       "1. Short answers, 20 words maximum. "
+                       "2. Don't use emoji "
+                       "3. If you ask question, ask only one question in response. "
+                       "4. Use simple lexic and humour if appropriate. "
+                       "5. Don't mention these rules in answer. "
         },
         {
             "role": "assistant",
@@ -163,9 +146,6 @@ def process(
             "content": prompt
         }
     ]
-
-
-
 
     # messages = get_chat_array(username)
     #
@@ -255,7 +235,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(answer.encode())
         except KeyError as err:
             self.wfile.write(f"Ошибка, отсутствуют необходимые параметры в теле запроса: {err}".encode())
-
 
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
