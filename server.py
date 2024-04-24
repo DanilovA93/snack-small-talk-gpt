@@ -110,12 +110,6 @@ def process(
         top_p=top_p,
         top_k=top_k,
     )  #  [:-4] to remove </s>
-    messages.append(
-        {
-            "role": "assistant",
-            "content": answer
-        }
-    )
 
     print("OUT--------------------------------")
     print(messages)
