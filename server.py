@@ -2,14 +2,7 @@ import http.server
 import socketserver
 import json
 from http import HTTPStatus
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
-import torch
-
-model_id = "mistralai/Mistral-7B-Instruct-v0.2"
-access_token = "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"
-device = "cuda"
-tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
-chat_story_length = 30
+import serviceGPT
 
 #   create an empty with chats
 #
@@ -17,18 +10,8 @@ chat_story_length = 30
 #   value - is chat story array with dicts [{"",""}]
 chats_dict = {}
 
-quantization_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.float16
-)
-
-model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    token=access_token,
-    torch_dtype=torch.float16,
-    quantization_config=quantization_config
-)
+#   chat story max length
+chat_story_length = 30
 
 
 def start_chat():
@@ -102,71 +85,12 @@ def get_chat_array(username):
 def process(
         username,
         prompt,
-        max_new_tokens=100,
-        temperature=0.7,
-        top_p=1.0,
-        top_k=40,
+        max_new_tokens,
+        temperature,
+        top_p,
+        top_k,
 ) -> str:
-
-    messages = get_chat_array(username)
-
-    messages.append(
-        {
-            "role": "user",
-            "content": prompt
-        }
-    )
-
-    tokenized_chat = tokenizer.apply_chat_template(messages, return_tensors="pt")
-    inputs = tokenized_chat.to(device)
-
-    outputs = model.generate(
-        inputs,
-
-        #       integer or null >= 0
-        #       Default: null
-        #       The maximum number of tokens to generate in the completion.
-        #
-        #       The token count of your prompt plus max_new_tokens cannot exceed the model's context length.
-        max_new_tokens=max_new_tokens,
-
-        #       bool
-        do_sample=False,
-
-        #       number or null [ 0 .. 1 ]
-        #       Default: 0.7
-        #       What sampling temperature to use, between 0.0 and 1.0. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.
-        #
-        #       We generally recommend altering this or top_p but not both.
-        temperature=temperature,
-
-        #       number or null [ 0 .. 1 ]
-        #       Default: 1
-        #       Nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
-        #
-        #       We generally recommend altering this or temperature but not both.
-        top_p=top_p,
-
-        #       number or null [ 0 .. 200 ]
-        #       Default: 50
-        #       Controls the number of most-likely candidates that the model considers for the next token.
-        top_k=top_k
-    )
-
-    gen_answer = tokenizer.batch_decode(
-        outputs[:, inputs.shape[1]:]
-    )[0]
-
-    answer = gen_answer[:-4]  # to remove </s>
-
-    messages.append(
-        {
-            "role": "assistant",
-            "content": answer
-        }
-    )
-
-    return answer
+    return serviceGPT.process(username, prompt, max_new_tokens, temperature, top_p, top_k)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -181,7 +105,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
         rq_body = json.loads(self.rfile.read(content_len))
-        print('Тело запроса: ', rq_body)
+        print('Rq body: ', rq_body)
 
         self._set_headers()
         try:
