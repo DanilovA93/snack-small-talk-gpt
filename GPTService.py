@@ -31,12 +31,21 @@ model = AutoModelForCausalLM.from_pretrained(
     quantization_config=quantization_config
 )
 
+generate_kwargs = dict(
+    temperature=0.9,
+    max_new_tokens=128,
+    top_p=1.0,
+    repetition_penalty=1.0,
+    do_sample=True,
+)
+
 chatbot = pipeline(
     task="conversational",
     model=model,
     tokenizer=tokenizer,
     eos_token_id=tokenizer.eos_token_id,
     pad_token_id=tokenizer.pad_token_id if tokenizer.pad_token_id is not None else tokenizer.unk_token_id,
+    **generate_kwargs
 )
 
 
@@ -48,11 +57,6 @@ def process(
         top_k=40,
 ) -> str:
     conversation = chatbot(chat)
-
-    print(conversation)
-    print("------------")
-    print(conversation.messages[-1]["content"])
-
     return conversation.messages[-1]["content"]
 
 # INSTALL TENSERFLOW ??

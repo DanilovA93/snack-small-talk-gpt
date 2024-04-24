@@ -5,13 +5,14 @@ from http import HTTPStatus
 import GPTService
 
 
-chat_story_length = 30
-
 #   create an empty with chats
 #
 #   key -   is username
 #   value - is chat story array with dicts [{"",""}]
 chats_dict = {}
+
+#   chat max length
+chat_story_length = 30
 
 
 def start_chat():
@@ -90,13 +91,7 @@ def process(
         top_p,
         top_k,
 ) -> str:
-
     messages = get_chat_array(username)
-
-    print("IN---------------------------------")
-    print(messages)
-    print("-----------------------------------")
-
     messages.append(
         {
             "role": "user",
@@ -110,10 +105,6 @@ def process(
         top_p=top_p,
         top_k=top_k,
     )  #  [:-4] to remove </s>
-
-    print("OUT--------------------------------")
-    print(messages)
-    print("-----------------------------------")
 
     return answer
 
