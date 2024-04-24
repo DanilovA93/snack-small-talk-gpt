@@ -42,7 +42,7 @@ def process(
         max_new_tokens=max_new_tokens,
 
         #       bool
-        do_sample=False,
+        do_sample=True,
 
         #       number or null [ 0 .. 1 ]
         #       Default: 0.7
