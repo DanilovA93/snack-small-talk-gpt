@@ -1,32 +1,6 @@
 import tensorflow as tf
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
-import torch
+from transformers import AutoTokenizer, TFAutoModelForCausalLM
 import time
-
-
-model_id = "mistralai/Mistral-7B-Instruct-v0.2"
-access_token = "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"
-device = "cuda"
-
-tokenizer = AutoTokenizer.from_pretrained(
-    model_id,
-    token=access_token,
-    padding_side="left",
-    pad_token="</s>"
-)
-
-quantization_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.float16
-)
-
-model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    token=access_token,
-    torch_dtype=torch.float16,
-    quantization_config=quantization_config
-)
 
 
 def process(
@@ -38,6 +12,14 @@ def process(
         top_k=40,
 ) -> str:
 
+    # Notice the new argument, `padding_side="left"` -- decoder-only models, which can
+    # be instantiated with TFAutoModelForCausalLM, should be left-padded, as they
+    # continue generating from the input prompt.
+    tokenizer = AutoTokenizer.from_pretrained(
+        "gpt2", padding_side="left", pad_token="</s>"
+    )
+    model = TFAutoModelForCausalLM.from_pretrained("gpt2")
+    model.config.pad_token_id = model.config.eos_token_id
     input_1 = ["TensorFlow is"]
     input_2 = ["TensorFlow is a"]
 
