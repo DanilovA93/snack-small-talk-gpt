@@ -32,7 +32,7 @@ def process(
         temperature=temperature,
         max_new_tokens=max_new_tokens,
         top_p=top_p,
-        repetition_penalty=1.2,
+        repetition_penalty=1.0,
         do_sample=True,
         seed=42,
     )
@@ -42,10 +42,10 @@ def process(
 
     outputs = model.generate(
         inputs,
-        **generate_kwargs,
         stream=False,
         details=True,
-        return_full_text=False
+        return_full_text=False,
+        **generate_kwargs
     )
 
     gen_answer = tokenizer.batch_decode(
