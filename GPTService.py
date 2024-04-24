@@ -34,7 +34,7 @@ model = AutoModelForCausalLM.from_pretrained(
 generate_kwargs = dict(
     temperature=0.9,
     max_new_tokens=128,
-    top_p=1.0,
+    top_p=0.92,
     repetition_penalty=1.0,
     do_sample=True,
 )
