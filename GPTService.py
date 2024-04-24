@@ -2,7 +2,7 @@ import torch
 
 from transformers import BitsAndBytesConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from transformers import pipeline, Conversation
+from transformers import pipeline
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
@@ -49,13 +49,7 @@ chatbot = pipeline(
 )
 
 
-def process(
-        chat,
-        max_new_tokens=128,
-        temperature=0.9,
-        top_p=0.9,
-        top_k=40,
-) -> str:
+def process(chat) -> str:
     conversation = chatbot(chat)
     return conversation.messages[-1]["content"]
 
