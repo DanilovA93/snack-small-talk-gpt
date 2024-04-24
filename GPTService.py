@@ -1,22 +1,42 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
+
+from transformers import BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import pipeline, Conversation
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 device = "cuda"
-tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
+
+tokenizer = AutoTokenizer.from_pretrained(
+    model_id,
+    token=access_token,
+    padding_side="left",
+    add_eos_token=True,
+    add_bos_token=True,
+)
+tokenizer.pad_token = tokenizer.unk_token
 
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.float16
+    bnb_4bit_compute_dtype=torch.bfloat16,
+    bnb_4bit_use_double_quant=True,
 )
 
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     token=access_token,
-    torch_dtype=torch.float16,
+    device_map="auto",
     quantization_config=quantization_config
+)
+
+chatbot = pipeline(
+    task="conversational",
+    model=model,
+    tokenizer=tokenizer,
+    eos_token_id=tokenizer.eos_token_id,
+    pad_token_id=tokenizer.pad_token_id if tokenizer.pad_token_id is not None else tokenizer.unk_token_id,
 )
 
 
@@ -27,30 +47,8 @@ def process(
         top_p=0.9,
         top_k=40,
 ) -> str:
+    conversation = chatbot(chat)
 
-    generate_kwargs = dict(
-        temperature=temperature,
-        max_new_tokens=max_new_tokens,
-        top_p=top_p,
-        repetition_penalty=1.0,
-        do_sample=True,
-        seed=42,
-    )
+    print(conversation)
 
-    tokenized_chat = tokenizer.apply_chat_template(chat, return_tensors="pt")
-    inputs = tokenized_chat.to(device)
-
-    outputs = model.generate(
-        inputs,
-        stream=False,
-        details=True,
-        return_full_text=False
-    )
-
-    gen_answer = tokenizer.batch_decode(
-        outputs[:, inputs.shape[1]:]
-    )[0]
-
-    answer = gen_answer[:-4]  # to remove </s>
-
-    return answer
+    return conversation.messages[-1]["content"]
