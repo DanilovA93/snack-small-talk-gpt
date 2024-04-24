@@ -92,6 +92,11 @@ def process(
 ) -> str:
 
     messages = get_chat_array(username)
+
+    print("-----------------------------------")
+    print(messages)
+    print("-----------------------------------")
+
     messages.append(
         {
             "role": "user",
