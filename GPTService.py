@@ -44,8 +44,7 @@ def process(
         inputs,
         stream=False,
         details=True,
-        return_full_text=False,
-        **generate_kwargs
+        return_full_text=False
     )
 
     gen_answer = tokenizer.batch_decode(
