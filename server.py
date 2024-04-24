@@ -85,10 +85,10 @@ def get_chat_array(username):
 def process(
         username,
         prompt,
-        max_new_tokens=100,
-        temperature=0.7,
-        top_p=1.0,
-        top_k=40,
+        max_new_tokens,
+        temperature,
+        top_p,
+        top_k,
 ) -> str:
 
     messages = get_chat_array(username)
