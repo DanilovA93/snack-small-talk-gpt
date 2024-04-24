@@ -93,7 +93,7 @@ def process(
 
     messages = get_chat_array(username)
 
-    print("-----------------------------------")
+    print("IN---------------------------------")
     print(messages)
     print("-----------------------------------")
 
@@ -116,6 +116,11 @@ def process(
             "content": answer
         }
     )
+
+    print("OUT--------------------------------")
+    print(messages)
+    print("-----------------------------------")
+
     return answer
 
 
