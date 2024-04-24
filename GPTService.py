@@ -1,7 +1,7 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
-model_id = "mistralai/Mistral-7B-Instruct-v0.1"
+model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 device = "cuda"
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
@@ -22,9 +22,9 @@ model = AutoModelForCausalLM.from_pretrained(
 
 def process(
         chat,
-        max_new_tokens=100,
-        temperature=0.7,
-        top_p=1.0,
+        max_new_tokens=128,
+        temperature=0.9,
+        top_p=0.9,
         top_k=40,
 ) -> str:
 
