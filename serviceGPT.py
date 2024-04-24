@@ -3,6 +3,8 @@ from transformers import AutoTokenizer, TFAutoModelForCausalLM
 import time
 
 
+model_id = "mistralai/Mistral-7B-Instruct-v0.2"
+
 def process(
         username,
         prompt,
@@ -16,9 +18,11 @@ def process(
     # be instantiated with TFAutoModelForCausalLM, should be left-padded, as they
     # continue generating from the input prompt.
     tokenizer = AutoTokenizer.from_pretrained(
-        "gpt2", padding_side="left", pad_token="</s>"
+        model_id,
+        padding_side="left",
+        pad_token="</s>"
     )
-    model = TFAutoModelForCausalLM.from_pretrained("gpt2")
+    model = TFAutoModelForCausalLM.from_pretrained(model_id)
     model.config.pad_token_id = model.config.eos_token_id
     input_1 = ["TensorFlow is"]
     input_2 = ["TensorFlow is a"]
