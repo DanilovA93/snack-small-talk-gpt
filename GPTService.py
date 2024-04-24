@@ -50,5 +50,7 @@ def process(
     conversation = chatbot(chat)
 
     print(conversation)
+    print("------------")
+    print(conversation.messages[-1]["content"])
 
     return conversation.messages[-1]["content"]

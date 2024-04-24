@@ -104,7 +104,7 @@ def process(
         temperature=temperature,
         top_p=top_p,
         top_k=top_k,
-    )#  [:-4]  # to remove </s>
+    )  #  [:-4] to remove </s>
     messages.append(
         {
             "role": "assistant",
