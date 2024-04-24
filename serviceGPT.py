@@ -1,5 +1,5 @@
 import tensorflow as tf
-from transformers import AutoTokenizer, TFAutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM
 import time
 
 
@@ -22,7 +22,7 @@ def process(
         padding_side="left",
         pad_token="</s>"
     )
-    model = TFAutoModelForCausalLM.from_pretrained(model_id)
+    model = AutoModelForCausalLM.from_pretrained(model_id)
     model.config.pad_token_id = model.config.eos_token_id
     input_1 = ["TensorFlow is"]
     input_2 = ["TensorFlow is a"]
