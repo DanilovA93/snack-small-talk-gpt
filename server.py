@@ -85,11 +85,7 @@ def get_chat_array(username):
 
 def process(
         username,
-        prompt,
-        max_new_tokens,
-        temperature,
-        top_p,
-        top_k,
+        prompt
 ) -> str:
     messages = get_chat_array(username)
     messages.append(
@@ -98,15 +94,7 @@ def process(
             "content": prompt
         }
     )
-    answer = GPTService.process(
-        messages,
-        max_new_tokens=max_new_tokens,
-        temperature=temperature,
-        top_p=top_p,
-        top_k=top_k,
-    )  #  [:-4] to remove </s>
-
-    return answer
+    return GPTService.process(messages)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -127,11 +115,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         try:
             answer = process(
                 rq_body['username'],
-                rq_body['prompt'],
-                rq_body.get("max_new_tokens", None),
-                rq_body.get("temperature", None),
-                rq_body.get("top_p", None),
-                rq_body.get("top_k", None)
+                rq_body['prompt']
             )
             self.wfile.write(answer.encode())
         except KeyError as err:
