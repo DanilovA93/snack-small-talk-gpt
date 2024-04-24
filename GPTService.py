@@ -1,7 +1,7 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 import torch
 
-model_id = "mistralai/Mistral-7B-Instruct-v0.2"
+model_id = "mistralai/Mistral-7B-Instruct-v0.1"
 access_token = "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"
 device = "cuda"
 tokenizer = AutoTokenizer.from_pretrained(model_id, token=access_token)
