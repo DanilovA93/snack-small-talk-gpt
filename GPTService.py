@@ -6,7 +6,6 @@ from transformers import pipeline
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
-device = "cuda"
 
 tokenizer = AutoTokenizer.from_pretrained(
     model_id,
