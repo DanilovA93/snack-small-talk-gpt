@@ -97,7 +97,8 @@ def process(username, prompt) -> str:
 
     sleep(5)
 
-    return "GPTService.process(messages)"
+    return threading.currentThread().getName()
+    # return GPTService.process(messages)
 
 
 class Handler(BaseHTTPRequestHandler):
