@@ -30,8 +30,8 @@
 # }
 #
 # print("ready")
-def process(chat) -> str:
-    print("process...")
+# def process(chat) -> str:
+#     print("process...")
     # output = pipe(chat, **generation_args)
     # print(output[0]['generated_text'])
-    return "hello"
+    # return "hello"
