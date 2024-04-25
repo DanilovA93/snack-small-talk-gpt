@@ -51,5 +51,3 @@ chatbot = pipeline(
 def process(chat) -> str:
     conversation = chatbot(chat)
     return conversation.messages[-1]["content"]
-
-# INSTALL TENSERFLOW ??

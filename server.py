@@ -4,6 +4,8 @@ import json
 from http import HTTPStatus
 import GPTService
 
+from time import sleep
+
 
 #   create an empty with chats
 #
@@ -91,7 +93,10 @@ def process(username, prompt) -> str:
             "content": prompt
         }
     )
-    return GPTService.process(messages)
+
+    sleep(5);
+
+    return "GPTService.process(messages)"
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
