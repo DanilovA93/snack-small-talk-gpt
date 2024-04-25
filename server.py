@@ -122,8 +122,10 @@ class Handler(BaseHTTPRequestHandler):
                 rq_body['prompt']
             )
             self.wfile.write(answer.encode())
-        except (KeyError, GPTException) as err:
+        except KeyError as err:
             self.wfile.write(f"Ошибка, отсутствуют необходимые параметры в теле запроса: {err}".encode())
+        except Exception as err:
+            self.wfile.write(f"Ошибка: {err}".encode())
 
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
