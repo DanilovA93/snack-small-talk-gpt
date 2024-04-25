@@ -20,27 +20,27 @@ tokenizer = AutoTokenizer.from_pretrained(
 tokenizer.pad_token = tokenizer.unk_token
 
 print("Creating quantization config...")
-quantization_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.bfloat16,
-    bnb_4bit_use_double_quant=True,
-)
+# quantization_config = BitsAndBytesConfig(
+#     load_in_4bit=True,
+#     bnb_4bit_quant_type="nf4",
+#     bnb_4bit_compute_dtype=torch.bfloat16,
+#     bnb_4bit_use_double_quant=True,
+# )
 
 print(f"Creating model {model_id}...")
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     token=access_token,
     device_map="auto",
-    quantization_config=quantization_config
+    # quantization_config=quantization_config
 )
 
 print("Creating generate kwargs...")
 generate_kwargs = dict(
     temperature=0.9,
-    max_new_tokens=128,
+    max_new_tokens=90,
     top_p=0.92,
-    repetition_penalty=1.0,
+    repetition_penalty=0.5,
     do_sample=True,
 )
 
