@@ -16,20 +16,22 @@ tokenizer = AutoTokenizer.from_pretrained("microsoft/Phi-3-mini-128k-instruct")
 
 print("pipeline...")
 pipe = pipeline(
-    "conversational",
+    "text-generation",
     model=model,
     tokenizer=tokenizer,
 )
 
 print("generation_args...")
-generation_args = {
-    "max_new_tokens": 100,
-    "temperature": 1.0,
-    "do_sample": False,
-}
+generation_args = dict(
+    temperature=0.9,
+    max_new_tokens=128,
+    top_p=0.92,
+    repetition_penalty=1.0,
+    do_sample=True,
+)
 
 print("ready")
 def process(chat) -> str:
     print("process...")
-    output = pipe(chat, **generation_args)
+    output = pipe(chat, use_fast=True, **generation_args)
     return output[0]['generated_text']
