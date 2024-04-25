@@ -1,5 +1,6 @@
 import json
 import GPTService
+import GPTException
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
@@ -86,13 +87,18 @@ def get_chat_array(username):
 
 def process(username, prompt) -> str:
     messages = get_chat_array(username)
-    messages.append(
-        {
-            "role": "user",
-            "content": prompt
-        }
-    )
-    return GPTService.process(messages)
+    try:
+        raise Exception("Bleat")
+        # messages.append(
+        #     {
+        #         "role": "user",
+        #         "content": prompt
+        #     }
+        # )
+        # return GPTService.process(messages)
+    except Exception as e:
+        messages.pop()
+        raise GPTException(e)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -116,9 +122,8 @@ class Handler(BaseHTTPRequestHandler):
                 rq_body['prompt']
             )
             self.wfile.write(answer.encode())
-        except KeyError as err:
+        except (KeyError, GPTException) as err:
             self.wfile.write(f"Ошибка, отсутствуют необходимые параметры в теле запроса: {err}".encode())
-
 
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
