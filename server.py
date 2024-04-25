@@ -1,5 +1,5 @@
 import json
-import GPTService
+# import GPTService
 import GPTException
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -98,6 +98,7 @@ def process(username, prompt) -> str:
         # return GPTService.process(messages)
     except Exception as e:
         messages.pop()
+        print("-))))))")
         raise GPTException(e)
 
 
