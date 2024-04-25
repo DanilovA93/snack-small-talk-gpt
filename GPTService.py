@@ -26,7 +26,7 @@ generation_args = {
     "max_new_tokens": 75,
     "return_full_text": False,
     "temperature": 0.9,
-    "do_sample": False,
+    "do_sample": True,
 }
 
 print("ready")
