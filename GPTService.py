@@ -34,7 +34,7 @@ generate_kwargs = dict(
     temperature=0.9,
     max_new_tokens=128,
     top_p=0.92,
-    repetition_penalty=0.0,
+    repetition_penalty=0.1,
     do_sample=True,
 )
 
