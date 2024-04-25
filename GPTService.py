@@ -5,7 +5,7 @@ from transformers import BitsAndBytesConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from transformers import pipeline
 
-device_map = {"": 1}
+device_map = {"": 0}
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
