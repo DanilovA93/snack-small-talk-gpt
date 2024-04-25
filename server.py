@@ -83,10 +83,7 @@ def get_chat_array(username):
     return chats_dict[username]
 
 
-def process(
-        username,
-        prompt
-) -> str:
+def process(username, prompt) -> str:
     messages = get_chat_array(username)
     messages.append(
         {
