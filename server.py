@@ -92,6 +92,11 @@ def process(username, prompt) -> str:
                 "content": prompt
             }
         )
+
+        print("-------------------------")
+        print(messages)
+        print("-------------------------")
+
         return GPTService.process(messages)
     except Exception as e:
         messages.pop()
