@@ -22,13 +22,12 @@ pipe = pipeline(
 )
 
 print("generation_args...")
-generation_args = dict(
-    temperature=0.9,
-    max_new_tokens=128,
-    top_p=0.92,
-    repetition_penalty=1.0,
-    do_sample=True,
-)
+generation_args = {
+    "max_new_tokens": 75,
+    "return_full_text": False,
+    "temperature": 0.9,
+    "do_sample": False,
+}
 
 print("ready")
 def process(chat) -> str:
