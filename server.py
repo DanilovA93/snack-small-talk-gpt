@@ -98,8 +98,7 @@ def process(username, prompt) -> str:
         # return GPTService.process(messages)
     except Exception as e:
         messages.pop()
-        print("-))))))")
-        raise GPTException(e)
+        raise Exception(e)
 
 
 class Handler(BaseHTTPRequestHandler):
