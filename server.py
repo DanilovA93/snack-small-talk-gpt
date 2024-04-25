@@ -131,6 +131,6 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
 
 print("Starting server...")
-httpd = socketserver.TCPServer(('', 8001), Handler)
+httpd = socketserver.TCPServer(('', 8002), Handler)
 httpd.serve_forever()
 print("Server started, use <Ctrl-C> to stop")
