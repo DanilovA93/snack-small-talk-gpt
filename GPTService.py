@@ -1,62 +1,30 @@
 import torch
-import threading
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
-from transformers import BitsAndBytesConfig
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from transformers import pipeline
+torch.random.manual_seed(0)
 
-
-model_id = "mistralai/Mistral-7B-Instruct-v0.2"
-access_token = "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"
-
-print("Creating tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained(
-    model_id,
-    token=access_token,
-    padding_side="left",
-    add_eos_token=True,
-    add_bos_token=True,
-)
-tokenizer.pad_token = tokenizer.unk_token
-
-print("Creating quantization config...")
-# quantization_config = BitsAndBytesConfig(
-#     load_in_4bit=True,
-#     bnb_4bit_quant_type="nf4",
-#     bnb_4bit_compute_dtype=torch.bfloat16,
-#     bnb_4bit_use_double_quant=True,
-# )
-
-print(f"Creating model {model_id}...")
 model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    token=access_token,
-    device_map="auto",
-    # quantization_config=quantization_config
+    "microsoft/Phi-3-mini-128k-instruct",
+    device_map="cuda",
+    torch_dtype="auto",
+    trust_remote_code=True,
 )
+tokenizer = AutoTokenizer.from_pretrained("microsoft/Phi-3-mini-128k-instruct")
 
-print("Creating generate kwargs...")
-generate_kwargs = dict(
-    temperature=0.9,
-    max_new_tokens=90,
-    top_p=0.92,
-    repetition_penalty=0.5,
-    do_sample=True,
-)
-
-print("Creating chatbot...")
-chatbot = pipeline(
-    task="conversational",
+pipe = pipeline(
+    "text-generation",
     model=model,
     tokenizer=tokenizer,
-    eos_token_id=tokenizer.eos_token_id,
-    pad_token_id=tokenizer.pad_token_id if tokenizer.pad_token_id is not None else tokenizer.unk_token_id,
-    use_fast=True,
-    **generate_kwargs
 )
 
+generation_args = {
+    "max_new_tokens": 100,
+    "return_full_text": False,
+    "temperature": 0.0,
+    "do_sample": False,
+}
 
 def process(chat) -> str:
-    print(f"Processing on {threading.currentThread().name}...")
-    conversation = chatbot(chat)
-    return conversation.messages[-1]["content"]
+    output = pipe(chat, **generation_args)
+    print(output[0]['generated_text'])
+    return "hello"
