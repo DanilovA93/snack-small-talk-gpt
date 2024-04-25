@@ -5,9 +5,6 @@ import socketserver
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from socketserver import ThreadingMixIn
-
 #   create an empty with chats
 #
 #   key -   is username
@@ -101,7 +98,7 @@ def process(username, prompt) -> str:
         raise Exception(e)
 
 
-class Handler(BaseHTTPRequestHandler):
+class Handler(SimpleHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(HTTPStatus.OK)
         self.send_header('Content-type', 'text/plain')
@@ -124,22 +121,16 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.write(answer.encode())
         except KeyError as err:
             self.wfile.write(f"Ошибка, отсутствуют необходимые параметры в теле запроса: {err}".encode())
-        # except Exception as err:
-        #     message = f"Ошибка: {err}"
-        #     print(message)
-        #     self.wfile.write(message.encode())
+        except Exception as err:
+            message = f"Ошибка: {err}"
+            print(message)
+            self.wfile.write(message.encode())
 
     def do_GET(self):
         self.send_response(HTTPStatus.OK)
         self.end_headers()
 
 
-class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
-    """Handle requests in a separate thread."""
-
-
-if __name__ == '__main__':
-    server = ThreadedHTTPServer(('', 8001), Handler)
-    print('Starting server, use <Ctrl-C> to stop')
-    server.serve_forever()
-
+httpd = socketserver.TCPServer(('', 8001), Handler)
+httpd.serve_forever()
+print("Server started, use <Ctrl-C> to stop")
