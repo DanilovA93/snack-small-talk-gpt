@@ -1,6 +1,5 @@
 import json
-# import GPTService
-import GPTException
+import GPTService
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
@@ -88,14 +87,13 @@ def get_chat_array(username):
 def process(username, prompt) -> str:
     messages = get_chat_array(username)
     try:
-        raise Exception("Bleat")
-        # messages.append(
-        #     {
-        #         "role": "user",
-        #         "content": prompt
-        #     }
-        # )
-        # return GPTService.process(messages)
+        messages.append(
+            {
+                "role": "user",
+                "content": prompt
+            }
+        )
+        return GPTService.process(messages)
     except Exception as e:
         messages.pop()
         raise Exception(e)

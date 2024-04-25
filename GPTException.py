@@ -1,2 +1,0 @@
-class GPTException(Exception):
-    pass
