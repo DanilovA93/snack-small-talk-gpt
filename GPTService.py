@@ -33,5 +33,4 @@ print("ready")
 def process(chat) -> str:
     print("process...")
     output = pipe(chat, **generation_args)
-    answer = output[0]['generated_text']
-    return answer
+    return output[0]['generated_text']
