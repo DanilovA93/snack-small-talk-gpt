@@ -4,10 +4,12 @@ import threading
 from transformers import BitsAndBytesConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from transformers import pipeline
+from accelerate import PartialState
 
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
+device_index = PartialState().process_index
 
 print("Creating tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(
@@ -31,7 +33,7 @@ print(f"Creating model {model_id}...")
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     token=access_token,
-    device_map="auto",
+    device_map=device_index,  # "auto",
     quantization_config=quantization_config
 )
 
