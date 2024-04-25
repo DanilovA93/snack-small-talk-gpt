@@ -34,7 +34,6 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto",
     quantization_config=quantization_config
 )
-model.cuda()
 
 print("Creating generate kwargs...")
 generate_kwargs = dict(
