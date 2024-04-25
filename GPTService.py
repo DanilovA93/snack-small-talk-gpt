@@ -33,5 +33,5 @@ generation_args = dict(
 print("ready")
 def process(chat) -> str:
     print("process...")
-    output = pipe(chat, use_fast=True, **generation_args)
+    output = pipe(chat, **generation_args)
     return output[0]['generated_text']
