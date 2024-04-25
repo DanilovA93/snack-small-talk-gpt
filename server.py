@@ -3,7 +3,7 @@ import json
 import GPTService
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from SocketServer import ThreadingMixIn
+from socketserver import ThreadingMixIn
 from http import HTTPStatus
 from time import sleep
 
