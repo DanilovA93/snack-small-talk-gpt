@@ -1,9 +1,10 @@
-import http.server
-import socketserver
+import threading
 import json
-from http import HTTPStatus
 import GPTService
 
+from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+from SocketServer import ThreadingMixIn
+from http import HTTPStatus
 from time import sleep
 
 
@@ -99,7 +100,7 @@ def process(username, prompt) -> str:
     return "GPTService.process(messages)"
 
 
-class Handler(http.server.SimpleHTTPRequestHandler):
+class Handler(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(HTTPStatus.OK)
         self.send_header('Content-type', 'text/plain')
@@ -129,5 +130,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
 
-httpd = socketserver.TCPServer(('', 8001), Handler)
-httpd.serve_forever()
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    """Handle requests in a separate thread."""
+
+
+if __name__ == '__main__':
+    server = ThreadedHTTPServer(('localhost', 8081), Handler)
+    print('Starting server, use <Ctrl-C> to stop')
+    server.serve_forever()
+
