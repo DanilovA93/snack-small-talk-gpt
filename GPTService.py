@@ -1,4 +1,5 @@
 import torch
+import threading
 
 from transformers import BitsAndBytesConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -55,6 +56,6 @@ chatbot = pipeline(
 
 
 def process(chat) -> str:
-    print("Processing...")
+    print(f"Processing on {threading.currentThread().name}...")
     conversation = chatbot(chat)
     return conversation.messages[-1]["content"]
