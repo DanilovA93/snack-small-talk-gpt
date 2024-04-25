@@ -1,11 +1,9 @@
-import threading
 import json
 import GPTService
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 from http import HTTPStatus
-from time import sleep
 
 
 #   create an empty with chats
@@ -94,11 +92,7 @@ def process(username, prompt) -> str:
             "content": prompt
         }
     )
-
-    sleep(5)
-
-    return threading.currentThread().name
-    # return GPTService.process(messages)
+    return GPTService.process(messages)
 
 
 class Handler(BaseHTTPRequestHandler):
