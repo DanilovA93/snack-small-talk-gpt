@@ -16,7 +16,7 @@ tokenizer = AutoTokenizer.from_pretrained("microsoft/Phi-3-mini-128k-instruct")
 
 print("pipeline...")
 pipe = pipeline(
-    "text-generation",
+    "conversational",
     model=model,
     tokenizer=tokenizer,
 )
