@@ -92,7 +92,7 @@ def process(username, prompt) -> str:
                 "content": prompt
             }
         )
-        return "GPTService.process(messages)"
+        return GPTService.process(messages)
     except Exception as e:
         messages.pop()
         raise Exception(e)
@@ -130,8 +130,7 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_response(HTTPStatus.OK)
         self.end_headers()
 
-print("Starting server...")
-httpd = socketserver.TCPServer(('', 8002), Handler)
-print("Starting server 2...")
+
+httpd = socketserver.TCPServer(('', 8001), Handler)
 httpd.serve_forever()
 print("Server started, use <Ctrl-C> to stop")
