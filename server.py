@@ -95,61 +95,39 @@ def process(username, prompt) -> str:
         }
     )
 
-    sleep(5);
+    sleep(5)
 
     return "GPTService.process(messages)"
 
 
-# class Handler(BaseHTTPRequestHandler):
-#     def _set_headers(self):
-#         self.send_response(HTTPStatus.OK)
-#         self.send_header('Content-type', 'text/plain')
-#         # Allow requests from any origin, so CORS policies don't
-#         # prevent local development.
-#         self.send_header('Access-Control-Allow-Origin', '*')
-#         self.end_headers()
-#
-#     def do_POST(self):
-#         content_len = int(self.headers.get('Content-Length'))
-#         rq_body = json.loads(self.rfile.read(content_len))
-#         print('Тело запроса: ', rq_body)
-#
-#         self._set_headers()
-#         try:
-#             answer = process(
-#                 rq_body['username'],
-#                 rq_body['prompt']
-#             )
-#             self.wfile.write(answer.encode())
-#         except KeyError as err:
-#             self.wfile.write(f"Ошибка, отсутствуют необходимые параметры в теле запроса: {err}".encode())
-#
-#
-#     def do_GET(self):
-#         self.send_response(HTTPStatus.OK)
-#         self.end_headers()
-#
-#
-# class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
-#     """Handle requests in a separate thread."""
-#
-#
-# if __name__ == '__main__':
-#     server = ThreadedHTTPServer(('localhost', 8081), Handler)
-#     print('Starting server, use <Ctrl-C> to stop')
-#     server.serve_forever()
-#
-
-
 class Handler(BaseHTTPRequestHandler):
+    def _set_headers(self):
+        self.send_response(HTTPStatus.OK)
+        self.send_header('Content-type', 'text/plain')
+        # Allow requests from any origin, so CORS policies don't
+        # prevent local development.
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+
+    def do_POST(self):
+        content_len = int(self.headers.get('Content-Length'))
+        rq_body = json.loads(self.rfile.read(content_len))
+        print('Тело запроса: ', rq_body)
+
+        self._set_headers()
+        try:
+            answer = process(
+                rq_body['username'],
+                rq_body['prompt']
+            )
+            self.wfile.write(answer.encode())
+        except KeyError as err:
+            self.wfile.write(f"Ошибка, отсутствуют необходимые параметры в теле запроса: {err}".encode())
+
 
     def do_GET(self):
-        self.send_response(200)
+        self.send_response(HTTPStatus.OK)
         self.end_headers()
-        message = threading.currentThread().getName()
-        self.wfile.write(message)
-        self.wfile.write('\n')
-        return
 
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
@@ -160,3 +138,4 @@ if __name__ == '__main__':
     server = ThreadedHTTPServer(('', 8001), Handler)
     print('Starting server, use <Ctrl-C> to stop')
     server.serve_forever()
+
