@@ -35,7 +35,7 @@ pipe.model = deepspeed.init_inference(
     pipe.model,
     tensor_parallel={"tp_size": world_size},
     dtype=torch.float,
-    injection_policy={T5Block: ('EncDecAttention.o', 'DenseReluDense.wo')}
+    injection_policy={T5Block: ('DenseReluDense.wo')}
 )
 
 print("Generating args...")
