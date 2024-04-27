@@ -63,15 +63,7 @@ def start_chat():
         },
         {
             "role": "assistant",
-            "content": "I hope that's all?"
-        },
-        {
-            "role": "user",
-            "content": "Let's chat! Ask me what i want"
-        },
-        {
-            "role": "assistant",
-            "content": "No, i want you to start, okey?"
+            "content": "Okey, let's start!"
         }
     ]
 
