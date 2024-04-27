@@ -14,7 +14,7 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype="auto",
     trust_remote_code=True,
     load_in_8bit=True
-).half()
+)
 model.config.pad_token_id = model.config.eos_token_id
 
 print("Creating tokenizer...")
