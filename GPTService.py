@@ -2,7 +2,7 @@ import torch
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
-model_id = "mistralai/Mistral-7B-Instruct-v0.2"  #"microsoft/Phi-3-mini-128k-instruct"
+model_id = "microsoft/Phi-3-mini-128k-instruct"  # "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 
 torch.random.manual_seed(0)
