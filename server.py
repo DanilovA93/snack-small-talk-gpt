@@ -12,7 +12,7 @@ from http.server import SimpleHTTPRequestHandler
 chats_dict = {}
 
 #   chat max length
-chat_story_length = 30
+chat_story_length = 15
 
 
 def start_chat():
