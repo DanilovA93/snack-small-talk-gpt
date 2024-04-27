@@ -92,7 +92,12 @@ def process(username, prompt) -> str:
                 "content": prompt
             }
         )
-        answer = GPTService.process(messages)
+        new_message=[{
+            "role": "user",
+            "content": prompt
+        }]
+
+        answer = GPTService.process(new_message)
         messages.append(
             {
                 "role": "assistant",

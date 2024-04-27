@@ -13,7 +13,7 @@ llm = Llama(
 def process(chat) -> str:
     print("process...")
     output = llm.create_chat_completion(
-        ["hello"],
+        chat,
         max_tokens=32
     )
     print(output)
