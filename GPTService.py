@@ -11,7 +11,7 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="cuda",
     torch_dtype="auto",
     trust_remote_code=True,
-)
+).half()
 
 print("tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(model_id)
