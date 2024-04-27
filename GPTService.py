@@ -3,12 +3,14 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 model_id = "mistralai/Mistral-7B-Instruct-v0.2"  #"microsoft/Phi-3-mini-128k-instruct"
+access_token = "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"
 
 torch.random.manual_seed(0)
 
 print("Creating model...")
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
+    token=access_token,
     device_map="cuda",
     torch_dtype="auto",
     trust_remote_code=True,
@@ -16,7 +18,10 @@ model = AutoModelForCausalLM.from_pretrained(
 model.config.pad_token_id = model.config.eos_token_id
 
 print("Creating tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained(model_id)
+tokenizer = AutoTokenizer.from_pretrained(
+    model_id,
+    token=access_token
+)
 tokenizer.padding_side = "left"
 tokenizer.pad_token = tokenizer.eos_token
 
