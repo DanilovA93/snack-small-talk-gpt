@@ -1,7 +1,11 @@
 import torch
 import deepspeed
+import os
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from transformers.models.t5.modeling_t5 import T5Block
+
+world_size = int(os.getenv('WORLD_SIZE', '1'))
 
 model_id = "microsoft/Phi-3-mini-128k-instruct"
 
@@ -13,8 +17,7 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="cuda",
     torch_dtype="auto",
     trust_remote_code=True,
-    load_in_8bit=True
-)
+).half()
 model.config.pad_token_id = model.config.eos_token_id
 
 print("Creating tokenizer...")
@@ -27,6 +30,12 @@ pipe = pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer
+)
+pipe.model = deepspeed.init_inference(
+    pipe.model,
+    tensor_parallel={"tp_size": world_size},
+    dtype=torch.float,
+    injection_policy={T5Block: ('SelfAttention.o', 'EncDecAttention.o', 'DenseReluDense.wo')}
 )
 
 print("Generating args...")
