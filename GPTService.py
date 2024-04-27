@@ -2,7 +2,7 @@ from llama_cpp import Llama
 
 
 llm = Llama(
-    model_path="./Phi-3-mini-4k-instruct-q4.gguf",  # path to GGUF file
+    model_path="./Phi-3-mini-4k-instruct-fp16.gguf",  # path to GGUF file
     chat_format="llama-2",
     n_ctx=32,  # The max sequence length to use - note that longer sequence lengths require much more resources
     n_threads=8, # The number of CPU threads to use, tailor to your system and the resulting performance
