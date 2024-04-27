@@ -117,7 +117,7 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
         rq_body = json.loads(self.rfile.read(content_len))
-        print('Тело запроса: ', rq_body)
+        print('Rq body: ', rq_body)
 
         self._set_headers()
         try:
@@ -127,9 +127,9 @@ class Handler(SimpleHTTPRequestHandler):
             )
             self.wfile.write(answer.encode())
         except KeyError as err:
-            self.wfile.write(f"Ошибка, отсутствуют необходимые параметры в теле запроса: {err}".encode())
+            self.wfile.write(f"Error, required parameters are missing in the request body: {err}".encode())
         except Exception as err:
-            message = f"Ошибка: {err}"
+            message = f"Error: {err}"
             print(message)
             self.wfile.write(message.encode())
 

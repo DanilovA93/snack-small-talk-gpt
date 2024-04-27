@@ -30,6 +30,8 @@ generation_args = {
 }
 
 print("ready")
+
+
 def process(chat) -> str:
     print("process...")
     output = pipe(chat, **generation_args)
