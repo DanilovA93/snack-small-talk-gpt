@@ -1,4 +1,6 @@
 import torch
+import deepspeed
+
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 model_id = "microsoft/Phi-3-mini-128k-instruct"
@@ -12,9 +14,12 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype="auto",
     trust_remote_code=True,
 ).half()
+model.config.pad_token_id = model.config.eos_token_id
 
 print("tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(model_id)
+tokenizer.padding_side = "left"
+tokenizer.pad_token = tokenizer.eos_token
 
 print("pipeline...")
 pipe = pipeline(
