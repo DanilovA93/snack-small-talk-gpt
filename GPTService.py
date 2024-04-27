@@ -1,9 +1,6 @@
 import torch
-import os
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-
-world_size = int(os.getenv('WORLD_SIZE', '1'))
 
 model_id = "microsoft/Phi-3-mini-128k-instruct"
 
@@ -14,7 +11,7 @@ model = AutoModelForCausalLM.from_pretrained(
     model_id,
     device_map="cuda",
     torch_dtype="auto",
-    trust_remote_code=False,
+    trust_remote_code=True,
 ).half()
 model.config.pad_token_id = model.config.eos_token_id
 
@@ -35,7 +32,7 @@ generation_args = {
     "max_new_tokens": 75,
     "return_full_text": False,
     "temperature": 0.9,
-    "do_sample": True,
+    "do_sample": False,
 }
 
 print("GPT service is ready")
