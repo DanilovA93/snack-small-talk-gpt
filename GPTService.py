@@ -5,6 +5,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 model_id = "microsoft/Phi-3-mini-128k-instruct"  # "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 
+torch.cuda.empty_cache()
 torch.random.manual_seed(0)
 
 print("Creating model...")
