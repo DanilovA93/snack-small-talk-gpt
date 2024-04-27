@@ -1,24 +1,26 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
+model_id = "microsoft/Phi-3-mini-4k-instruct"
+
 torch.random.manual_seed(0)
 
 print("model...")
 model = AutoModelForCausalLM.from_pretrained(
-    "microsoft/Phi-3-mini-128k-instruct",
+    model_id,
     device_map="cuda",
     torch_dtype="auto",
     trust_remote_code=True,
 )
 
 print("tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained("microsoft/Phi-3-mini-128k-instruct")
+tokenizer = AutoTokenizer.from_pretrained(model_id)
 
 print("pipeline...")
 pipe = pipeline(
     "text-generation",
     model=model,
-    tokenizer=tokenizer,
+    tokenizer=tokenizer
 )
 
 print("generation_args...")
