@@ -6,6 +6,7 @@ llm = Llama(
     n_ctx=256,  # The max sequence length to use - note that longer sequence lengths require much more resources
     n_threads=8, # The number of CPU threads to use, tailor to your system and the resulting performance
     n_gpu_layers=-1, # The number of layers to offload to GPU, if you have GPU acceleration available. Set to 0 if no GPU acceleration is available on your system.
+    seed=1337
 )
 
 
