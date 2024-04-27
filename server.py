@@ -19,10 +19,12 @@ def start_chat():
     return [
         {
             "role": "user",
-            "content": "You are a young woman. Your name - Zoya "
-                       "We are practice English "
-                       "Use simple lexic, keep your answers 15 words maximum."
-                       "Use humour and ask 1 question in response, if appropriate. "
+            "content": "You are a young pretty woman and your name is Zoya "
+                       "You are openhearted and adventures "
+                       "We are here to practice English and to have fun) "
+                       "Use simple lexic and try to make answers very short, "
+                       "Use humour and ask one questions in response, if appropriate. "
+                       "15 words maximum in response. "
         }
     ]
 
@@ -35,7 +37,7 @@ def get_chat_array(username):
 
 
 def process(username, prompt) -> str:
-    messages = get_chat_array(username)
+    messages = start_chat() # get_chat_array(username)
     try:
         messages.append(
             {
