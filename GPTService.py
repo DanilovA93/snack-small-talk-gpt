@@ -14,7 +14,7 @@ model = AutoModelForCausalLM.from_pretrained(
     model_id,
     device_map="cuda",
     torch_dtype="auto",
-    trust_remote_code=True,
+    trust_remote_code=False,
 ).half()
 model.config.pad_token_id = model.config.eos_token_id
 
