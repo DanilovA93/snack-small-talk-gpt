@@ -1,38 +1,14 @@
+import transformers
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
-torch.random.manual_seed(0)
+model_id = "meta-llama/Meta-Llama-3-8B"
 
-print("model...")
-model = AutoModelForCausalLM.from_pretrained(
-    "microsoft/Phi-3-mini-128k-instruct",
-    device_map="cuda",
-    torch_dtype="auto",
-    trust_remote_code=True,
+pipeline = transformers.pipeline(
+    "text-generation", model=model_id, model_kwargs={"torch_dtype": torch.bfloat16}, device_map="auto"
 )
-
-print("tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained("microsoft/Phi-3-mini-128k-instruct")
-
-print("pipeline...")
-pipe = pipeline(
-    "text-generation",
-    model=model,
-    tokenizer=tokenizer,
-)
-
-print("generation_args...")
-generation_args = {
-    "max_new_tokens": 75,
-    "return_full_text": False,
-    "temperature": 0.9,
-    "do_sample": True,
-}
-
-print("ready")
 
 
 def process(chat) -> str:
-    print("process...")
-    output = pipe(chat, **generation_args)
-    return output[0]['generated_text']
+    answer = pipeline(chat[-1])
+    print(answer)
+    return answer
