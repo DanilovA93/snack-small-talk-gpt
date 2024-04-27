@@ -32,7 +32,7 @@ def start_chat():
 def get_chat_array(username):
     if username not in chats_dict:
         chats_dict[username] = start_chat()
-    if chats_dict[username].len() > chat_story_length:
+    if len(chats_dict[username]) > chat_story_length:
         chats_dict[username] = [chats_dict[username], chats_dict[username][-chat_story_length + 1:]]
     print(chats_dict[username])
     return chats_dict[username]
