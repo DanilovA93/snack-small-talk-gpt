@@ -13,6 +13,8 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="cuda",
     torch_dtype="auto",
     trust_remote_code=True,
+    load_in_8bit=True,
+    attn_implementation="flash_attention_2",
 ).half()
 model.config.pad_token_id = model.config.eos_token_id
 
