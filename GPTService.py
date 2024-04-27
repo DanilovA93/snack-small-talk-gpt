@@ -1,9 +1,7 @@
 import torch
-import deepspeed
 import os
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-from transformers.models.t5.modeling_t5 import T5Block
 
 world_size = int(os.getenv('WORLD_SIZE', '1'))
 
@@ -30,11 +28,6 @@ pipe = pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer
-)
-pipe.model = deepspeed.init_inference(
-    pipe.model,
-    tensor_parallel={"tp_size": world_size},
-    dtype=torch.float,
 )
 
 print("Generating args...")
