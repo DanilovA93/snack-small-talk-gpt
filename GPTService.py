@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
-model_id = "microsoft/Phi-3-mini-4k-instruct"
+model_id = "microsoft/Phi-3-mini-4k-instruct-q4.gguf"
 
 torch.random.manual_seed(0)
 
