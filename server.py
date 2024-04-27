@@ -59,7 +59,7 @@ def start_chat():
         },
         {
             "role": "user",
-            "content": "If you ask question, ask only one question in response"
+            "content": "Ask only one questions in response"
         },
         {
             "role": "assistant",
