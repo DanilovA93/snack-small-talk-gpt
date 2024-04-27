@@ -3,7 +3,8 @@ import GPTService
 import socketserver
 
 from http import HTTPStatus
-from http.server import SimpleHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from socketserver import ThreadingMixIn
 
 #   create an empty with chats
 #
@@ -105,7 +106,7 @@ def process(username, prompt) -> str:
         raise Exception(e)
 
 
-class Handler(SimpleHTTPRequestHandler):
+class Handler(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(HTTPStatus.OK)
         self.send_header('Content-type', 'text/plain')
@@ -117,7 +118,7 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
         rq_body = json.loads(self.rfile.read(content_len))
-        print('Rq body: ', rq_body)
+        print('Тело запроса: ', rq_body)
 
         self._set_headers()
         try:
@@ -127,9 +128,9 @@ class Handler(SimpleHTTPRequestHandler):
             )
             self.wfile.write(answer.encode())
         except KeyError as err:
-            self.wfile.write(f"Error, required parameters are missing in the request body: {err}".encode())
+            self.wfile.write(f"Ошибка, отсутствуют необходимые параметры в теле запроса: {err}".encode())
         except Exception as err:
-            message = f"Error: {err}"
+            message = f"Ошибка: {err}"
             print(message)
             self.wfile.write(message.encode())
 
@@ -138,6 +139,11 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
 
 
-httpd = socketserver.TCPServer(('', 8001), Handler)
-httpd.serve_forever()
-print("Server started, use <Ctrl-C> to stop")
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    """Handle requests in a separate thread."""
+
+
+if __name__ == '__main__':
+    server = ThreadedHTTPServer(('', 8001), Handler)
+    print('Starting server, use <Ctrl-C> to stop')
+    server.serve_forever()
