@@ -12,8 +12,9 @@ llm = Llama(
 def process(chat) -> str:
     print("process...")
     output = llm(
-        chat[-1],
+        f"<|user|>\n{chat[-1]}<|end|>\n<|assistant|>",
         max_tokens=128,
+        stop=["<|end|>"],
         echo=True,  # Whether to echo the prompt
     )
     return output['choices'][0]['text']
