@@ -1,40 +1,20 @@
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from llama_cpp import Llama
 
-model_id = "microsoft/Phi-3-mini-128k-instruct"
 
-torch.random.manual_seed(0)
-
-print("model...")
-model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    device_map="cuda",
-    torch_dtype="auto",
-    trust_remote_code=True,
+llm = Llama(
+    model_path="./Phi-3-mini-4k-instruct-q4.gguf",  # path to GGUF file
+    n_ctx=4096,  # The max sequence length to use - note that longer sequence lengths require much more resources
+    n_threads=8, # The number of CPU threads to use, tailor to your system and the resulting performance
+    n_gpu_layers=35, # The number of layers to offload to GPU, if you have GPU acceleration available. Set to 0 if no GPU acceleration is available on your system.
 )
-
-print("tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-
-print("pipeline...")
-pipe = pipeline(
-    "text-generation",
-    model=model,
-    tokenizer=tokenizer
-)
-
-print("generation_args...")
-generation_args = {
-    "max_new_tokens": 75,
-    "return_full_text": False,
-    "temperature": 0.9,
-    "do_sample": True,
-}
-
-print("ready")
 
 
 def process(chat) -> str:
     print("process...")
-    output = pipe(chat, **generation_args)
-    return output[0]['generated_text']
+    output = llm(
+        f"<|user|>\n{chat[-1]}<|end|>\n<|assistant|>",
+        max_tokens=256,  # Generate up to 256 tokens
+        stop=["<|end|>"],
+        echo=True,  # Whether to echo the prompt
+    )
+    return output['choices'][0]['text']
