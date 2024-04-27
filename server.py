@@ -12,7 +12,7 @@ from http.server import SimpleHTTPRequestHandler
 chats_dict = {}
 
 #   chat max length
-chat_story_length = 15
+chat_story_length = 3
 
 
 def start_chat():
@@ -32,12 +32,14 @@ def start_chat():
 def get_chat_array(username):
     if username not in chats_dict:
         chats_dict[username] = start_chat()
-    chats_dict[username] = chats_dict[username][-chat_story_length:]
+    if chats_dict[username].length >= chat_story_length:
+        chats_dict[username] = chats_dict[username][1, -chat_story_length:]
+    print(chats_dict[username])
     return chats_dict[username]
 
 
 def process(username, prompt) -> str:
-    messages = start_chat() # get_chat_array(username)
+    messages = get_chat_array(username)
     try:
         messages.append(
             {
