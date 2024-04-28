@@ -12,7 +12,7 @@ model = AutoModelForCausalLM.from_pretrained(
     model_id,
     token=access_token,
     device_map="cuda",
-    torch_dtype="auto",
+    # torch_dtype="auto",
     trust_remote_code=True,
 ).half()
 model.config.pad_token_id = model.config.eos_token_id
