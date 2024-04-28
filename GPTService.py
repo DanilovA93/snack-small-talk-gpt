@@ -11,26 +11,26 @@ print("Creating model...")
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     token=access_token,
-    device_map="cuda",
-    torch_dtype="auto",
+    # device_map="cuda",
+    # torch_dtype="auto",
     trust_remote_code=True,
-).half()
-model.config.pad_token_id = model.config.eos_token_id
+)#.half()
+#model.config.pad_token_id = model.config.eos_token_id
 
-print("Creating tokenizer...")
-tokenizer = AutoTokenizer.from_pretrained(
-    model_id,
-    token=access_token
-)
-tokenizer.padding_side = "left"
-tokenizer.pad_token = tokenizer.eos_token
+# print("Creating tokenizer...")
+# tokenizer = AutoTokenizer.from_pretrained(
+#     model_id,
+#     token=access_token
+# )
+# tokenizer.padding_side = "left"
+# tokenizer.pad_token = tokenizer.eos_token
 
 print("Building pipeline...")
 pipe = pipeline(
     "text-generation",
     model=model,
-    tokenizer=tokenizer,
-    batch_size=8
+    # tokenizer=tokenizer,
+    device=0
 )
 
 print("Generating args...")
@@ -45,5 +45,8 @@ print("GPT service is ready")
 
 
 def process(chat) -> str:
-    output = pipe(chat, **generation_args)
+    output = pipe(
+        chat,
+        batch_size=8,
+        **generation_args)
     return output[0]['generated_text']
