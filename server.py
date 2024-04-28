@@ -46,10 +46,13 @@ def get_chat_array(username):
     return chats_dict[username]
 
 
-def cut_chat_array(array):
-    if len(array) > chat_story_length:
-        array.pop(1)
-        array.pop(2)
+def cut_chat_array(chat):
+    print("--------------------------------")
+    print(chat)
+    print("--------------------------------")
+    if len(chat) > chat_story_length:
+        chat.pop(1)
+        chat.pop(2)
 
 
 def process(username, prompt) -> str:
