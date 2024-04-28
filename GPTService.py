@@ -5,16 +5,16 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 model_id = "microsoft/Phi-3-mini-128k-instruct"  # "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 
-torch.random.manual_seed(0)
-device_count = torch.cuda.device_count()
-print(f"Device count = {device_count}")
+# torch.random.manual_seed(0)
+# device_count = torch.cuda.device_count()
+# print(f"Device count = {device_count}")
 
 print("Creating model...")
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     token=access_token,
-    # device_map="cuda",
-    # torch_dtype="auto",
+    device_map="cuda",
+    torch_dtype="auto",
     trust_remote_code=True,
 )#.half()
 #model.config.pad_token_id = model.config.eos_token_id
@@ -32,7 +32,8 @@ pipe = pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer,
-    device=1
+    device_map="auto",
+    grouped_entities=True
 )
 
 print("Generating args...")
