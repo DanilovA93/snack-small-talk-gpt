@@ -32,8 +32,7 @@ pipe = pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer,
-    device_map="auto",
-    grouped_entities=True
+    device_map="auto"
 )
 
 print("Generating args...")
