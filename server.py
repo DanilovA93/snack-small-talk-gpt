@@ -41,28 +41,28 @@ def get_chat_array(username):
 
 
 def process(username, prompt) -> str:
-    messages = get_chat_array(username)
+    # messages = get_chat_array(username)
     try:
-        messages.append(
-            {
-                "role": "user",
-                "content": prompt
-            }
-        )
+        # messages.append(
+        #     {
+        #         "role": "user",
+        #         "content": prompt
+        #     }
+        # )
         # messages = cut_chat_array(messages)
         answer = GPTService.process([{
             "role": "user",
             "content": prompt
         }])
-        messages.append(
-            {
-                "role": "assistant",
-                "content": answer
-            }
-        )
+        # messages.append(
+        #     {
+        #         "role": "assistant",
+        #         "content": answer
+        #     }
+        # )
         return answer
     except Exception as e:
-        messages.pop()
+        # messages.pop()
         raise Exception(e)
 
 
