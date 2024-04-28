@@ -30,7 +30,7 @@ pipe = pipeline(
     "text-generation",
     model=model,
     tokenizer=tokenizer,
-    batch_size=2
+    batch_size=8
 )
 
 print("Generating args...")
