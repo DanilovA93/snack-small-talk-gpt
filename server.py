@@ -29,7 +29,7 @@ chat_story_length = 2
 def start_chat():
     return [
         {
-            "role": "user",
+            "role": "system",
             "content": "You are a young pretty woman and your name is Zoya "
                        "You are openhearted and adventures "
                        "We are here to practice English and to have fun) "
@@ -46,39 +46,32 @@ def get_chat_array(username):
     return chats_dict[username]
 
 
-# def cut_chat_array(array):
-#     if len(array) > chat_story_length:
-#         array = array[0] + array[(-chat_story_length + 1):]
+def cut_chat_array(array):
+    if len(array) > chat_story_length:
+        array.pop(1)
+        array.pop(2)
 
 
 def process(username, prompt) -> str:
-    # messages = get_chat_array(username)
+    messages = get_chat_array(username)
     try:
-        # messages.append(
-        #     {
-        #         "role": "user",
-        #         "content": prompt
-        #     }
-        # )
-        # messages = cut_chat_array(messages)
-        answer = GPTService.process(
-            [
-                start_prompt,
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
+        messages.append(
+            {
+                "role": "user",
+                "content": prompt
+            }
         )
-        # messages.append(
-        #     {
-        #         "role": "assistant",
-        #         "content": answer
-        #     }
-        # )
+        answer = GPTService.process(messages)
+        messages.append(
+            {
+                "role": "assistant",
+                "content": answer
+            }
+        )
+        cut_chat_array(messages)
         return answer
     except Exception as e:
-        # messages.pop()
+        messages.pop()
         raise Exception(e)
 
 
