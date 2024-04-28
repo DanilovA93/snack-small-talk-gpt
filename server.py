@@ -23,7 +23,7 @@ start_prompt = {
 chats_dict = {}
 
 #   chat max length
-chat_story_length = 2 # должно быть кратным 2м
+chat_story_length = 2  # must be a multiple of 2
 
 
 def start_chat():
