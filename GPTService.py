@@ -6,6 +6,8 @@ model_id = "microsoft/Phi-3-mini-128k-instruct"  # "mistralai/Mistral-7B-Instruc
 access_token = "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"
 
 torch.random.manual_seed(0)
+device_count = torch.cuda.device_count()
+print(f"Device count = {device_count}")
 
 print("Creating model...")
 model = AutoModelForCausalLM.from_pretrained(
