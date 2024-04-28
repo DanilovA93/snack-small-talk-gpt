@@ -23,7 +23,7 @@ start_prompt = {
 chats_dict = {}
 
 #   chat max length
-chat_story_length = 2
+chat_story_length = 2 # должно быть кратным 2м
 
 
 def start_chat():
@@ -47,9 +47,6 @@ def get_chat_array(username):
 
 
 def cut_chat_array(chat):
-    print("--------------------------------")
-    print(chat)
-    print("--------------------------------")
     if len(chat) > chat_story_length:
         chat.pop(1)
         chat.pop(1)
