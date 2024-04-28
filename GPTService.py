@@ -29,7 +29,8 @@ print("Building pipeline...")
 pipe = pipeline(
     "text-generation",
     model=model,
-    tokenizer=tokenizer
+    tokenizer=tokenizer,
+    batch_size=2
 )
 
 print("Generating args...")
