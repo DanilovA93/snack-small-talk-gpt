@@ -50,7 +50,10 @@ def process(username, prompt) -> str:
         #     }
         # )
         # messages = cut_chat_array(messages)
-        answer = GPTService.process([{
+        answer = GPTService.process(
+            start_chat() +
+        [
+        {
             "role": "user",
             "content": prompt
         }])
