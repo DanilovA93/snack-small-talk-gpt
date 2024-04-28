@@ -17,19 +17,19 @@ model = AutoModelForCausalLM.from_pretrained(
 )#.half()
 #model.config.pad_token_id = model.config.eos_token_id
 
-# print("Creating tokenizer...")
-# tokenizer = AutoTokenizer.from_pretrained(
-#     model_id,
-#     token=access_token
-# )
-# tokenizer.padding_side = "left"
-# tokenizer.pad_token = tokenizer.eos_token
+print("Creating tokenizer...")
+tokenizer = AutoTokenizer.from_pretrained(
+    model_id,
+    token=access_token
+)
+tokenizer.padding_side = "left"
+tokenizer.pad_token = tokenizer.eos_token
 
 print("Building pipeline...")
 pipe = pipeline(
     "text-generation",
     model=model,
-    # tokenizer=tokenizer,
+    tokenizer=tokenizer,
     device=0
 )
 
