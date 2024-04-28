@@ -5,6 +5,17 @@ import socketserver
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler
 
+#   start prompt
+start_prompt = {
+    "role": "system",
+    "content": "You are a young pretty woman and your name is Zoya "
+               "You are openhearted and adventures "
+               "We are here to practice English and to have fun) "
+               "Use simple lexic and try to make answers very short, "
+               "Use humour and ask one questions in response, if appropriate. "
+               "15 words maximum in response. "
+}
+
 #   create an empty with chats
 #
 #   key -   is username
@@ -51,12 +62,14 @@ def process(username, prompt) -> str:
         # )
         # messages = cut_chat_array(messages)
         answer = GPTService.process(
-            start_chat() +
-        [
-        {
-            "role": "user",
-            "content": prompt
-        }])
+            [
+                start_prompt,
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
         # messages.append(
         #     {
         #         "role": "assistant",

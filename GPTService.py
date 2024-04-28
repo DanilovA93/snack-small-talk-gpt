@@ -45,6 +45,5 @@ print("GPT service is ready")
 
 
 def process(chat) -> str:
-    print(chat)
     output = pipe(chat, **generation_args)
     return output[0]['generated_text']
