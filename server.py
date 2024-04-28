@@ -51,8 +51,7 @@ def cut_chat_array(chat):
     print(chat)
     print("--------------------------------")
     if len(chat) > chat_story_length:
-        chat.pop(1)
-        chat.pop(2)
+        chat.pop(1, 2)
 
 
 def process(username, prompt) -> str:
