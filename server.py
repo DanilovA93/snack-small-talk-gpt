@@ -12,7 +12,7 @@ from http.server import SimpleHTTPRequestHandler
 chats_dict = {}
 
 #   chat max length
-chat_story_length = 3
+chat_story_length = 2
 
 
 def start_chat():
@@ -32,10 +32,12 @@ def start_chat():
 def get_chat_array(username):
     if username not in chats_dict:
         chats_dict[username] = start_chat()
-    if len(chats_dict[username]) > chat_story_length:
-        chats_dict[username] = [chats_dict[username], chats_dict[username][-chat_story_length + 1:]]
-    print(chats_dict[username])
     return chats_dict[username]
+
+
+# def cut_chat_array(array):
+#     if len(array) > chat_story_length:
+#         array = array[0] + array[(-chat_story_length + 1):]
 
 
 def process(username, prompt) -> str:
@@ -47,7 +49,11 @@ def process(username, prompt) -> str:
                 "content": prompt
             }
         )
-        answer = GPTService.process(messages)
+        # messages = cut_chat_array(messages)
+        answer = GPTService.process([{
+            "role": "user",
+            "content": prompt
+        }])
         messages.append(
             {
                 "role": "assistant",
