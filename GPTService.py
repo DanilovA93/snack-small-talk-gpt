@@ -49,10 +49,12 @@ print("GPT service is ready")
 def process(chat) -> str:
     last_request = chat[-1]["content"]
     cached_response = get_from_cache(last_request)
-
+    print(f"Get from cache {cached_response}")
     if cached_response is not None:
+        print("11111111")
         return cached_response
     else:
+        print("22222222")
         output = pipe(chat, **generation_args)
         answer = output[0]['generated_text']
         cache(last_request, answer)
@@ -65,7 +67,5 @@ def cache(request, response):
 
 
 def get_from_cache(request) -> str:
-    print(f"Try to get from cache {request}")
     key = str(hash(request))
-    print(f"Key {key}")
     return cache_dict[key]
