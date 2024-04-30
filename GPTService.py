@@ -71,5 +71,7 @@ def get_from_cache(request):
     hash_str = hash(request)
     print(f"Request hash: {request}")
     key = str(hash_str)
-    print(f"Result: {cache_dict[key]}")
-    return cache_dict[key]
+    print(f"Key: {key}")
+    result = cache_dict[key]
+    print(f"Result: {key}")
+    return result
