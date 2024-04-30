@@ -2,6 +2,8 @@ import torch
 
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
+cache_dict = {}
+
 model_id = "microsoft/Phi-3-mini-128k-instruct"  # "mistralai/Mistral-7B-Instruct-v0.2"
 access_token = "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"
 
@@ -45,5 +47,23 @@ print("GPT service is ready")
 
 
 def process(chat) -> str:
-    output = pipe(chat, **generation_args)
-    return output[0]['generated_text']
+    last_request = chat[-1]["content"]
+    cached_response = get_from_cache(last_request)
+
+    if cached_response is not None:
+        return cached_response
+    else:
+        output = pipe(chat, **generation_args)
+        answer = output[0]['generated_text']
+        cache(last_request, answer)
+        return answer
+
+
+def cache(request, response):
+    key = str(hash(request))
+    cache_dict[key] = response
+
+
+def get_from_cache(request) -> str:
+    key = str(hash(request))
+    return cache_dict[key]
