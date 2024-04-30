@@ -66,6 +66,6 @@ def cache(request, response):
     cache_dict[key] = response
 
 
-def get_from_cache(request) -> str:
+def get_from_cache(request):
     key = str(hash(request))
     return cache_dict[key]
