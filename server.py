@@ -87,7 +87,7 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
         rq_body = json.loads(self.rfile.read(content_len))
-        print('Rq body: ', rq_body)
+        print(f'Rq body: {rq_body}')
 
         self._set_headers()
         try:
@@ -95,7 +95,7 @@ class Handler(SimpleHTTPRequestHandler):
                 rq_body['username'],
                 rq_body['prompt']
             )
-            print('Rs body: ', rq_body)
+            print(f'Rs body: {answer}')
             self.wfile.write(answer.encode())
         except KeyError as err:
             self.wfile.write(f"Error, required parameters are missing in the request body: {err}".encode())
