@@ -95,6 +95,7 @@ class Handler(SimpleHTTPRequestHandler):
                 rq_body['username'],
                 rq_body['prompt']
             )
+            print('Rq body: ', rq_body)
             self.wfile.write(answer.encode())
         except KeyError as err:
             self.wfile.write(f"Error, required parameters are missing in the request body: {err}".encode())

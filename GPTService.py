@@ -58,12 +58,12 @@ def process(chat) -> str:
         return answer
 
 
-def cache(request, response):
-    key = str(hash(request))
-    cache_dict[key] = response
-
-
 def get_from_cache(request):
     request_hash = hash(request)
     key = str(request_hash)
     return cache_dict[key] if key in cache_dict else None
+
+
+def cache(request, response):
+    key = str(hash(request))
+    cache_dict[key] = response
