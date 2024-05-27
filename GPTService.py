@@ -4,7 +4,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 cache_dict = {}
 
-model_id = "microsoft/Phi-3-mini-128k-instruct"  # "mistralai/Mistral-7B-Instruct-v0.2"
+model_id = "mistralai/Mistral-7B-Instruct-v0.3"
 access_token = "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"
 
 torch.random.manual_seed(0)
