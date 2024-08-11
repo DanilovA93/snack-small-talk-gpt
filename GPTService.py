@@ -1,4 +1,4 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 device = "cuda" # the device to load the model onto
 model_id = "Qwen/Qwen2-7B-Instruct"
@@ -15,24 +15,6 @@ print("Creating tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(
     model_id
 )
-
-print("Building pipeline...")
-pipe = pipeline(
-    "text-generation",
-    model=model,
-    tokenizer=tokenizer,
-    batch_size=8
-)
-
-print("Generating args...")
-generation_args = {
-    "max_new_tokens": 75,
-    "return_full_text": False,
-    "temperature": 0.9,
-    "do_sample": False,
-}
-
-print("LLM service is ready")
 
 
 def process(prompt) -> str:
