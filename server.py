@@ -24,6 +24,7 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
+        print(self.headers)
         content_len = int(self.headers.get('Content-Length'))
         rq_body = json.loads(self.rfile.read(content_len))
         print(f'Rq body: {rq_body}')
