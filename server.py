@@ -6,9 +6,9 @@ from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler
 
 
-def process(prompt) -> str:
+def process(system_prompt, user_prompt) -> str:
     try:
-        answer = GPTService.process(prompt)
+        answer = GPTService.process(system_prompt, user_prompt)
         return answer
     except Exception as e:
         raise Exception(e)
@@ -30,7 +30,7 @@ class Handler(SimpleHTTPRequestHandler):
 
         self._set_headers()
         try:
-            answer = process(rq_body['prompt'])
+            answer = process(rq_body['system_prompt'], rq_body['user_prompt'])
             print(f'Rs body: {answer}')
             self.wfile.write(answer.encode())
         except KeyError as err:
