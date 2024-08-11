@@ -1,31 +1,20 @@
-import torch
-
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
-cache_dict = {}
-
-model_id = "mistralai/Mistral-7B-Instruct-v0.3"
+device = "cuda" # the device to load the model onto
+model_id = "Qwen/Qwen2-7B-Instruct"
 access_token = "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"
-
-torch.random.manual_seed(0)
 
 print("Creating model...")
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
-    token=access_token,
-    device_map="cuda",
     torch_dtype="auto",
-    trust_remote_code=True,
-).half()
-model.config.pad_token_id = model.config.eos_token_id
+    device_map="auto"
+)
 
 print("Creating tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(
-    model_id,
-    token=access_token
+    model_id
 )
-tokenizer.padding_side = "left"
-tokenizer.pad_token = tokenizer.eos_token
 
 print("Building pipeline...")
 pipe = pipeline(
@@ -43,27 +32,28 @@ generation_args = {
     "do_sample": False,
 }
 
-print("GPT service is ready")
+print("LLM service is ready")
 
 
-def process(chat) -> str:
-    last_request = chat[-1]["content"]
-    cached_response = get_from_cache(last_request)
-    if cached_response is not None:
-        return cached_response
-    else:
-        output = pipe(chat, **generation_args)
-        answer = output[0]['generated_text']
-        cache(last_request, answer)
-        return answer
+def process(prompt) -> str:
+    messages = [
+        {"role": "system", "content": "Ты полезный помощник"},
+        {"role": "user", "content": prompt}
+    ]
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True
+    )
 
+    model_inputs = tokenizer([text], return_tensors="pt").to(device)
 
-def get_from_cache(request):
-    request_hash = hash(request)
-    key = str(request_hash)
-    return cache_dict[key] if key in cache_dict else None
+    generated_ids = model.generate(
+        model_inputs.input_ids,
+        max_new_tokens=512
+    )
+    generated_ids = [
+        output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
+    ]
 
-
-def cache(request, response):
-    key = str(hash(request))
-    cache_dict[key] = response
+    return tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
