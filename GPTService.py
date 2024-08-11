@@ -19,7 +19,7 @@ tokenizer = AutoTokenizer.from_pretrained(
 
 def process(prompt) -> str:
     messages = [
-        {"role": "system", "content": "Ты полезный помощник"},
+        {"role": "system", "content": "Ты полезный помощник, который ищет все слова содержащие букву \"А\""},
         {"role": "user", "content": prompt}
     ]
     text = tokenizer.apply_chat_template(
