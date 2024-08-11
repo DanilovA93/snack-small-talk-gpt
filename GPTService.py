@@ -1,7 +1,7 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 device = "cuda" # the device to load the model onto
-model_id = "Qwen/Qwen2-7B-Instruct"
+model_id = "Qwen/Qwen2-72B-Instruct"
 access_token = "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"
 
 print("Creating model...")
